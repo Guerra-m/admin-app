@@ -22,7 +22,7 @@ export const LoginPage = () => {
     });
 
     if (success) {
-      navigate("/shopping");
+      navigate("/productos");
     }
   };
 

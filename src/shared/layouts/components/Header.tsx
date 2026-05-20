@@ -1,4 +1,5 @@
-import { useAuthStore } from "../../modules/auth/store/authStore";
+import { useAuthStore } from "../../../modules/auth/store/authStore";
+import { Navbar } from "./Navbar";
 
 export const Header = () => {
 
@@ -21,9 +22,9 @@ export const Header = () => {
     >
 
       <h1 className="text-2xl font-bold tracking-wide">
-        TP - Lista de compras
+        FoodStore
       </h1>
-
+      <Navbar></Navbar>
       <button
         onClick={logout}
         className="
