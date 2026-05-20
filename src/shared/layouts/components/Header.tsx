@@ -24,7 +24,6 @@ export const Header = () => {
       <h1 className="text-2xl font-bold tracking-wide">
         FoodStore
       </h1>
-      <Navbar></Navbar>
       <button
         onClick={logout}
         className="

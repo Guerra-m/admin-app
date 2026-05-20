@@ -16,34 +16,31 @@ const links = [
 ];
 
 const linkBase =
-  "rounded-md px-3 py-2 text-sm transition";
+  "rounded-md px-3 py-2 text-sm transition block";
 
 export const Navbar = () => {
   return (
-    <header className="border-b bg-gray-800
-        text-white">
-      <nav className="mx-auto flex max-w-6xl gap-2 p-4">
+    <nav className="flex flex-col gap-2">
 
-        {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className={({ isActive }) =>
-              `
-                ${linkBase}
-                ${
-                  isActive
-                    ? "bg-blue-600 text-white"
-                    : "hover:bg-gray-100"
-                }
-              `
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+      {links.map((link) => (
+        <NavLink
+          key={link.to}
+          to={link.to}
+          className={({ isActive }) =>
+            `
+              ${linkBase}
+              ${
+                isActive
+                  ? "bg-blue-600 text-white"
+                  : "hover:bg-gray-700"
+              }
+            `
+          }
+        >
+          {link.label}
+        </NavLink>
+      ))}
 
-      </nav>
-    </header>
+    </nav>
   );
 };
