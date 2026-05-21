@@ -12,13 +12,12 @@ import {
   removeIngredientFromProduct,
 } from "../../../shared/api/productoIngrediente.api";
 
-import { useCreateProduct } from "../hooks/useCreateProduct";
-import { useDeleteProduct } from "../hooks/useDeleteProduct";
-import { useUpdateProduct } from "../hooks/useUpdateProduct";
+
+import { useProducts } from "./useProduct";
 
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
-import type { ProductoRead } from "../types/ProductoRead";
+import type { ProductoRead, ProductoCreate } from "../types/Producto";
 
 type ProductFormState = {
   nombre: string;
@@ -61,10 +60,11 @@ const toggleId = (ids: number[], id: number) => {
 
 export const useProductForm = () => {
   const queryClient = useQueryClient();
-
-  const createProduct = useCreateProduct();
-  const updateProduct = useUpdateProduct();
-  const deleteProduct = useDeleteProduct();
+  const {
+    createProduct,
+    updateProduct,
+    deleteProduct,
+  } = useProducts();
 
   const [open, setOpen] = useState(false);
 
@@ -179,7 +179,7 @@ export const useProductForm = () => {
       return;
     }
 
-    const payload = {
+    const payload: ProductoCreate = {
       nombre: form.nombre.trim(),
 
       descripcion:
@@ -195,6 +195,10 @@ export const useProductForm = () => {
       stock_cantidad: stock,
 
       disponible: form.disponible,
+
+      categorias_ids: form.categoriaIds,
+
+      ingredientes_ids: form.ingredienteIds,
     };
 
     try {
