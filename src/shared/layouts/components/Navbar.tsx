@@ -13,6 +13,10 @@ const links = [
     to: "/ingredientes",
     label: "Ingredientes",
   },
+  {
+    to: "/empleados",
+    label: "Empleados",
+  },
 ];
 
 const linkBase =

@@ -8,6 +8,7 @@ import { ProductsPage } from '../modules/products/pages/ProductsPage';
 import { ProductDetailPage } from '../modules/products/pages/ProductDetailPage';
 import { IngredientsPage } from '../modules/ingredients/pages/IngredientsPage';
 import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
+import { EmployeesPage } from '../modules/employees/pages/EmployeesPage';
 
 export const AppRouter = () => {
 
@@ -28,7 +29,7 @@ export const AppRouter = () => {
           <Route path="/productos/:id" element={<ProductDetailPage />} />
           <Route path="/categorias" element={<CategoriesPage />} />
           <Route path="/ingredientes" element={<IngredientsPage />} />
-
+          <Route path="/empleados" element={<EmployeesPage/>}/>
         </Route>
 
       </Route>
