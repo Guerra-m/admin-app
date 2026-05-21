@@ -1,8 +1,9 @@
 import { http } from "../api/http";
 
-import type { CategoriaRead } from "../types/CategoriaRead";
-import type { CategoriaCreate } from "../types/CategoriaCreate";
-import type { CategoriaUpdate } from "../types/CategoriaUpdate";
+import type { CategoriaRead, 
+  CategoriaCreate, 
+  CategoriaUpdate } from "../../modules/categories/types/Categories";
+
 
 /**
  * GET /categorias

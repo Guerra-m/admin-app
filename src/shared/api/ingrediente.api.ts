@@ -1,8 +1,9 @@
 import { http } from "../api/http";
 
-import type { IngredienteRead } from "../../modules/ingredients/types/IngredienteRead";
-import type { IngredienteCreate } from "../../modules/ingredients/types/IngredienteCreate";
-import type { IngredienteUpdate } from "../../modules/ingredients/types/IngredienteUpdate";
+import type { IngredienteRead, 
+  IngredienteCreate, 
+  IngredienteUpdate } from "../../modules/ingredients/types/Ingredients";
+
 
 /**
  * POST /ingredientes
