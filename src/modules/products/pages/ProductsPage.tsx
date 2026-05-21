@@ -6,7 +6,7 @@ import { Button } from "../../../shared/components/Button";
 
 import { useCategories } from "../../categories/hooks/useCategories";
 import { useIngredients } from "../../ingredients/hooks/useIngredients";
-import { useProducts } from "../hooks/useProducts";
+import { useProducts } from "../hooks/useProduct";
 
 import { useProductForm } from "../hooks/useProductForm";
 

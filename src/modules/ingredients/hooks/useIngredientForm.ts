@@ -1,12 +1,10 @@
 import { useState } from "react";
 
-import { useCreateIngredient } from "./useCreateIngredient";
-import { useDeleteIngredient } from "./useDeleteIngredient";
-import { useUpdateIngredient } from "./useUpdateIngredient";
+import { useIngredients } from "./useIngredients";
 
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
+import type { IngredienteRead } from "../types/Ingredients";
 
-import type { IngredienteRead } from "../types/IngredienteRead";
 
 type IngredientFormState = {
   nombre: string;
@@ -29,14 +27,12 @@ const toForm = (
 });
 
 export const useIngredientForm = () => {
-  const createIngredient =
-    useCreateIngredient();
+  const {
+    createIngredient,
+    updateIngredient, 
+    deleteIngredient
+  } = useIngredients();
 
-  const updateIngredient =
-    useUpdateIngredient();
-
-  const deleteIngredient =
-    useDeleteIngredient();
 
   const [open, setOpen] = useState(false);
 
