@@ -1,12 +1,10 @@
 import { useState } from "react";
 
-import { useCreateCategory } from "./useCreateCategory";
-import { useDeleteCategory } from "./useDeleteCategory";
-import { useUpdateCategory } from "./useUpdateCategory";
+import { useCategories } from "./useCategories";
 
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
-import type { CategoriaRead } from "../types/CategoriaRead";
+import type { CategoriaRead } from "../types/Categories";
 
 type CategoryFormState = {
   nombre: string;
@@ -34,9 +32,11 @@ const toForm = (
 });
 
 export const useCategoryForm = () => {
-  const createCategory = useCreateCategory();
-  const updateCategory = useUpdateCategory();
-  const deleteCategory = useDeleteCategory();
+  const {
+    createCategory,
+    updateCategory,
+    deleteCategory,
+  } = useCategories();
 
   const [open, setOpen] = useState(false);
 
@@ -86,8 +86,8 @@ export const useCategoryForm = () => {
         form.parent_id.trim() === ""
           ? undefined
           : Number.isNaN(parsedParentId)
-          ? undefined
-          : parsedParentId,
+            ? undefined
+            : parsedParentId,
     };
 
     try {
