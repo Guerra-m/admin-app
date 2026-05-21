@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import { Button } from "../../../shared/components/Button";
 
-import type { ProductoRead } from "../types/ProductoRead";
+import type { ProductoRead } from "../types/Producto";
 
 type Props = {
   products: ProductoRead[];
@@ -16,67 +16,231 @@ export const ProductsTable = ({
   onDelete,
 }: Props) => {
   return (
-    <div className="overflow-x-auto rounded-lg border bg-white">
-      <table className="min-w-full text-sm">
+    <div
+      className="
+        overflow-x-auto
 
-        <thead className="bg-blue-400 text-left">
+        rounded-xl
+
+        bg-surface-container-lowest
+
+        border
+        border-outline-variant
+
+        shadow-warm
+      "
+    >
+      <table
+        className="
+          min-w-full
+          text-sm
+          font-admin
+        "
+      >
+
+        {/* HEADER */}
+        <thead
+          className="
+            bg-surface-container
+
+            text-on-surface
+
+            border-b
+            border-outline-variant
+          "
+        >
           <tr>
-            <th className="p-3">Imagen</th>
-            <th className="p-3">Nombre</th>
-            <th className="p-3">Precio</th>
-            <th className="p-3">Stock</th>
-            <th className="p-3">Disponible</th>
-            <th className="p-3">Categorías</th>
-            <th className="p-3">Ingredientes</th>
-            <th className="p-3">Acciones</th>
+
+            <th className="p-4 text-left font-semibold">
+              Imagen
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Nombre
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Precio
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Stock
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Disponible
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Categorías
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Ingredientes
+            </th>
+
+            <th className="p-4 text-left font-semibold">
+              Acciones
+            </th>
+
           </tr>
         </thead>
 
+        {/* BODY */}
         <tbody>
-          {products.map((product) => {
+
+          {products.map((product, index) => {
             const coverImage =
               product.imagenes_url[0];
 
             return (
               <tr
                 key={product.id}
-                className="border-t hover:bg-blue-50"
+                className={`
+                  border-b
+                  border-outline-variant/40
+
+                  transition-colors
+                  duration-200
+
+                  hover:bg-surface-container-low
+
+                  ${
+                    index % 2 === 0
+                      ? "bg-surface-container-lowest"
+                      : "bg-surface"
+                  }
+                `}
               >
 
-                <td className="p-3">
+                {/* IMAGE */}
+                <td className="p-4">
                   {coverImage ? (
                     <img
                       src={coverImage}
                       alt={product.nombre}
-                      className="h-32 w-32 rounded-md border object-cover"
+                      className="
+                        h-24
+                        w-24
+
+                        rounded-lg
+
+                        border
+                        border-outline-variant
+
+                        object-cover
+                      "
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <span className="text-xs text-gray-400">
+                    <div
+                      className="
+                        h-24
+                        w-24
+
+                        rounded-lg
+
+                        bg-surface-container
+
+                        flex
+                        items-center
+                        justify-center
+
+                        text-xs
+                        text-on-surface-variant
+                      "
+                    >
                       Sin imagen
-                    </span>
+                    </div>
                   )}
                 </td>
 
-                <td className="p-3 font-medium">
-                  {product.nombre}
+                {/* NAME */}
+                <td className="p-4">
+                  <div className="font-semibold text-on-surface">
+                    {product.nombre}
+                  </div>
+
+                  <div
+                    className="
+                      text-xs
+                      text-on-surface-variant
+                      mt-1
+                    "
+                  >
+                    ID #{product.id}
+                  </div>
                 </td>
 
-                <td className="p-3">
+                {/* PRICE */}
+                <td className="p-4 text-on-surface">
                   ${product.precio_base}
                 </td>
 
-                <td className="p-3">
-                  {product.stock_cantidad}
+                {/* STOCK */}
+                <td className="p-4">
+
+                  <span
+                    className={`
+                      inline-flex
+                      rounded-full
+                      px-3
+                      py-1
+                      text-xs
+                      font-semibold
+
+                      ${
+                        product.stock_cantidad > 0
+                          ? `
+                            bg-tertiary/10
+                            text-tertiary
+                          `
+                          : `
+                            bg-error/10
+                            text-error
+                          `
+                      }
+                    `}
+                  >
+                    {product.stock_cantidad}
+                  </span>
+
                 </td>
 
-                <td className="p-3">
-                  {product.disponible
-                    ? "Sí"
-                    : "No"}
+                {/* AVAILABLE */}
+                <td className="p-4">
+
+                  <span
+                    className={`
+                      inline-flex
+                      rounded-full
+                      px-3
+                      py-1
+                      text-xs
+                      font-semibold
+
+                      ${
+                        product.disponible
+                          ? `
+                            bg-tertiary/10
+                            text-tertiary
+                          `
+                          : `
+                            bg-error/10
+                            text-error
+                          `
+                      }
+                    `}
+                  >
+                    {product.disponible
+                      ? "Disponible"
+                      : "No disponible"}
+                  </span>
+
                 </td>
 
-                <td className="p-3">
+                {/* CATEGORIES */}
+                <td className="p-4 text-on-surface-variant">
                   {product.categorias.length
                     ? product.categorias
                         .map((c) => c.nombre)
@@ -84,7 +248,8 @@ export const ProductsTable = ({
                     : "-"}
                 </td>
 
-                <td className="p-3">
+                {/* INGREDIENTS */}
+                <td className="p-4 text-on-surface-variant">
                   {product.ingredientes.length
                     ? product.ingredientes
                         .map((i) => i.nombre)
@@ -92,12 +257,36 @@ export const ProductsTable = ({
                     : "-"}
                 </td>
 
-                <td className="p-3">
+                {/* ACTIONS */}
+                <td className="p-4">
                   <div className="flex flex-wrap gap-2">
 
                     <Link
                       to={`/productos/${product.id}`}
-                      className="rounded-md border px-3 py-2 text-sm hover:bg-gray-100"
+                      className="
+                        inline-flex
+                        items-center
+                        justify-center
+
+                        rounded-md
+
+                        border
+                        border-outline-variant
+
+                        bg-surface-container
+
+                        px-4
+                        py-2
+
+                        text-sm
+                        font-semibold
+                        text-on-surface
+
+                        transition-all
+                        duration-200
+
+                        hover:bg-surface-container-high
+                      "
                     >
                       Ver
                     </Link>
@@ -126,6 +315,7 @@ export const ProductsTable = ({
               </tr>
             );
           })}
+
         </tbody>
 
       </table>

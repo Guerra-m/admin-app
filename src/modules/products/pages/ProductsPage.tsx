@@ -1,5 +1,4 @@
 import { ProductFormModal } from "../components/ProductFormModal";
-
 import { ProductsTable } from "../components/ProductsTable";
 
 import { Button } from "../../../shared/components/Button";
@@ -49,13 +48,39 @@ export const ProductsPage = () => {
   } = useProductForm();
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-stack-lg">
 
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+        "
+      >
+        <div>
+          <h1
+            className="
+              text-3xl
+              font-bold
+              text-primary
+              font-store
+            "
+          >
+            Productos
+          </h1>
 
-        <h1 className="text-2xl font-bold">
-          Productos
-        </h1>
+          <p
+            className="
+              text-sm
+              text-on-surface-variant
+              font-admin
+              mt-1
+            "
+          >
+            Gestión completa de productos del sistema
+          </p>
+        </div>
 
         <Button
           type="button"
@@ -63,33 +88,88 @@ export const ProductsPage = () => {
         >
           Nuevo producto
         </Button>
-
       </div>
 
+      {/* Error Form */}
       {formError && (
-        <p className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-700">
+        <div
+          className="
+            rounded-md
+            border
+            border-error
+
+            bg-error/10
+
+            px-4
+            py-3
+
+            text-sm
+            text-error
+
+            shadow-sm
+          "
+        >
           {formError}
-        </p>
+        </div>
       )}
 
+      {/* Loading */}
       {isLoading && (
-        <p>Cargando productos...</p>
+        <div
+          className="
+            rounded-lg
+            bg-surface-container
+            p-6
+            text-on-surface-variant
+            shadow-warm
+          "
+        >
+          Cargando productos...
+        </div>
       )}
 
+      {/* Error API */}
       {isError && (
-        <p className="text-red-700">
+        <div
+          className="
+            rounded-lg
+            border
+            border-error
+
+            bg-error/10
+
+            p-4
+
+            text-error
+          "
+        >
           Error: {getApiErrorMessage(error)}
-        </p>
+        </div>
       )}
 
+      {/* Table */}
       {!isLoading && !isError && (
-        <ProductsTable
-          products={data}
-          onEdit={startEdit}
-          onDelete={(id) => void onDelete(id)}
-        />
+        <div
+          className="
+            rounded-xl
+            bg-surface-container-lowest
+            border
+            border-outline-variant
+
+            shadow-warm
+
+            overflow-hidden
+          "
+        >
+          <ProductsTable
+            products={data}
+            onEdit={startEdit}
+            onDelete={(id) => void onDelete(id)}
+          />
+        </div>
       )}
 
+      {/* Modal */}
       <ProductFormModal
         open={open}
         editing={editing}
