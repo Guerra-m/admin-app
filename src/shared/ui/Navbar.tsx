@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../../modules/auth/store/authStore";
+import { useAuthStore } from "../../modules/auth/store/authStore";
 
 const links = [
   {

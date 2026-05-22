@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useQueryClient } from "@tanstack/react-query";
 
 import {
@@ -12,9 +11,7 @@ import {
   removeIngredientFromProduct,
 } from "../../../shared/api/productoIngrediente.api";
 
-
 import { useProducts } from "./useProduct";
-
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
 import type { ProductoRead, ProductoCreate } from "../types/Producto";
@@ -23,7 +20,7 @@ type ProductFormState = {
   nombre: string;
   descripcion: string;
   precio_base: string;
-  imagenes_url: string;
+  imagenes_url: string; // 👈 string único
   stock_cantidad: string;
   disponible: boolean;
   categoriaIds: number[];
@@ -45,37 +42,33 @@ const toForm = (product: ProductoRead): ProductFormState => ({
   nombre: product.nombre,
   descripcion: product.descripcion ?? "",
   precio_base: String(product.precio_base),
-  imagenes_url: product.imagenes_url.join(", "),
+
+  // 👇 backend string → frontend string
+  imagenes_url: product.imagenes_url ?? "",
+
   stock_cantidad: String(product.stock_cantidad),
   disponible: product.disponible,
+
   categoriaIds: product.categorias.map((item) => item.id),
   ingredienteIds: product.ingredientes.map((item) => item.id),
 });
 
-const toggleId = (ids: number[], id: number) => {
-  return ids.includes(id)
-    ? ids.filter((item) => item !== id)
+const toggleId = (ids: number[], id: number) =>
+  ids.includes(id)
+    ? ids.filter((i) => i !== id)
     : [...ids, id];
-};
 
 export const useProductForm = () => {
   const queryClient = useQueryClient();
-  const {
-    createProduct,
-    updateProduct,
-    deleteProduct,
-  } = useProducts();
+
+  const { createProduct, updateProduct, deleteProduct } =
+    useProducts();
 
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<ProductoRead | null>(null);
 
-  const [editing, setEditing] =
-    useState<ProductoRead | null>(null);
-
-  const [form, setForm] =
-    useState<ProductFormState>(emptyForm);
-
-  const [formError, setFormError] =
-    useState<string>("");
+  const [form, setForm] = useState<ProductFormState>(emptyForm);
+  const [formError, setFormError] = useState("");
 
   const startCreate = () => {
     setEditing(null);
@@ -98,10 +91,10 @@ export const useProductForm = () => {
     currentProduct?: ProductoRead,
   ) => {
     const currentCategoryIds =
-      currentProduct?.categorias.map((item) => item.id) ?? [];
+      currentProduct?.categorias.map((c) => c.id) ?? [];
 
     const currentIngredientIds =
-      currentProduct?.ingredientes.map((item) => item.id) ?? [];
+      currentProduct?.ingredientes.map((i) => i.id) ?? [];
 
     const categoriesToAdd = selectedCategoryIds.filter(
       (id) => !currentCategoryIds.includes(id),
@@ -166,38 +159,27 @@ export const useProductForm = () => {
     const stock = Number(form.stock_cantidad);
 
     if (Number.isNaN(precio) || precio < 0) {
-      setFormError(
-        "El precio debe ser un número válido mayor o igual a 0.",
-      );
+      setFormError("Precio inválido.");
       return;
     }
 
     if (Number.isNaN(stock) || stock < 0) {
-      setFormError(
-        "El stock debe ser un número válido mayor o igual a 0.",
-      );
+      setFormError("Stock inválido.");
       return;
     }
 
     const payload: ProductoCreate = {
       nombre: form.nombre.trim(),
-
-      descripcion:
-        form.descripcion.trim() || undefined,
-
+      descripcion: form.descripcion.trim() || undefined,
       precio_base: precio,
 
-      imagenes_url: form.imagenes_url
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
+      // 
+      imagenes_url: form.imagenes_url.trim() || "",
 
       stock_cantidad: stock,
-
       disponible: form.disponible,
 
       categorias_ids: form.categoriaIds,
-
       ingredientes_ids: form.ingredienteIds,
     };
 
@@ -210,17 +192,11 @@ export const useProductForm = () => {
           payload,
         });
       } else {
-        const createdProduct =
-          await createProduct.mutateAsync(payload);
-
-        productId = createdProduct.id;
+        const created = await createProduct.mutateAsync(payload);
+        productId = created.id;
       }
 
-      if (!productId) {
-        throw new Error(
-          "No se pudo resolver el id del producto.",
-        );
-      }
+      if (!productId) throw new Error("Sin ID de producto");
 
       await syncRelations(
         productId,
@@ -229,44 +205,31 @@ export const useProductForm = () => {
         editing ?? undefined,
       );
 
-      void queryClient.invalidateQueries({
-        queryKey: ["products"],
-      });
-
-      void queryClient.invalidateQueries({
-        queryKey: ["products", productId],
-      });
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
 
       setOpen(false);
       setEditing(null);
       setForm(emptyForm);
       setFormError("");
-    } catch (submitError) {
-      setFormError(
-        getApiErrorMessage(submitError),
-      );
+    } catch (err) {
+      setFormError(getApiErrorMessage(err));
     }
   };
 
   const onDelete = async (id: number) => {
     try {
       await deleteProduct.mutateAsync(id);
-    } catch (deleteError) {
-      setFormError(
-        getApiErrorMessage(deleteError),
-      );
+    } catch (err) {
+      setFormError(getApiErrorMessage(err));
     }
   };
 
   return {
     open,
     setOpen,
-
     editing,
-
     form,
     setForm,
-
     formError,
 
     startCreate,
@@ -274,11 +237,9 @@ export const useProductForm = () => {
 
     onSubmit,
     onDelete,
-
     toggleId,
 
     isSubmitting:
-      createProduct.isPending ||
-      updateProduct.isPending,
+      createProduct.isPending || updateProduct.isPending,
   };
 };

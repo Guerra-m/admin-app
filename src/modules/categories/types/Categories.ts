@@ -1,16 +1,23 @@
 export interface CategoriaCreate {
   nombre: string;
-  descripcion?: string;
-  imagen_url?: string;
-  parent_id?: number;
+  descripcion?: string | null;
+  imagen_url?: string | null;
+  parent_id?: number | null;
+}
+
+export interface CategoriaUpdate {
+  nombre?: string | null;
+  descripcion?: string | null;
+  imagen_url?: string | null;
+  parent_id?: number | null;
 }
 
 export interface CategoriaRead {
   id: number;
 
   nombre: string;
-  descripcion?: string;
-  imagen_url?: string;
+  descripcion?: string | null;
+  imagen_url?: string | null;
 
   parent_id?: number | null;
 
@@ -21,11 +28,4 @@ export interface CategoriaRead {
 export interface CategoriaReadSimple {
   id: number;
   nombre: string;
-}
-
-export interface CategoriaUpdate {
-  nombre?: string;
-  descripcion?: string;
-  imagen_url?: string;
-  parent_id?: number;
 }

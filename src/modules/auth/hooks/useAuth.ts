@@ -46,13 +46,7 @@ export const useAuth = () => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await userApi.logout();
-    } finally {
-      clear();
-    }
-  };
+  const logout = useAuthStore((s) => s.logout);
 
   const getMe = async () => {
     try {
