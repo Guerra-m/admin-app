@@ -1,6 +1,6 @@
 import { Button } from "../../../shared/components/Button";
 
-import type { CategoriaRead } from "../types/CategoriaRead";
+import type { CategoriaRead } from "../types/Categories";
 
 type Props = {
   categories: CategoriaRead[];
@@ -13,67 +13,242 @@ export const CategoriesTable = ({
   onEdit,
   onDelete,
 }: Props) => {
-  return (
-    <div className="overflow-x-auto rounded-lg border bg-white">
-      <table className="min-w-full text-sm">
 
-        <thead className="bg-blue-400 text-left">
+  return (
+
+    <div
+      className="
+        overflow-x-auto
+
+        rounded-2xl
+
+        border
+        border-outline-variant
+
+        bg-surface-container-low
+
+        shadow-warm
+      "
+    >
+
+      <table className="min-w-full">
+
+        {/* HEADER */}
+        <thead
+          className="
+            border-b
+            border-outline-variant
+
+            bg-surface-container
+          "
+        >
+
           <tr>
-            <th className="p-3">Nombre</th>
-            <th className="p-3">Descripción</th>
-            <th className="p-3">Parent ID</th>
-            <th className="p-3">Acciones</th>
+
+            <th
+              className="
+                px-6
+                py-4
+
+                text-left
+                text-sm
+                font-bold
+                font-admin
+
+                text-on-surface
+              "
+            >
+              Nombre
+            </th>
+
+            <th
+              className="
+                px-6
+                py-4
+
+                text-left
+                text-sm
+                font-bold
+                font-admin
+
+                text-on-surface
+              "
+            >
+              Descripción
+            </th>
+
+            <th
+              className="
+                px-6
+                py-4
+
+                text-left
+                text-sm
+                font-bold
+                font-admin
+
+                text-on-surface
+              "
+            >
+              Parent ID
+            </th>
+
+            <th
+              className="
+                px-6
+                py-4
+
+                text-left
+                text-sm
+                font-bold
+                font-admin
+
+                text-on-surface
+              "
+            >
+              Acciones
+            </th>
+
           </tr>
+
         </thead>
 
+        {/* BODY */}
         <tbody>
+
           {categories.map((category) => (
+
             <tr
               key={category.id}
-              className="border-t hover:bg-blue-50"
+              className="
+                border-b
+                border-outline-variant/50
+
+                transition-colors
+                duration-200
+
+                hover:bg-surface-container
+              "
             >
 
-              <td className="p-3 font-medium">
+              {/* NOMBRE */}
+              <td
+                className="
+                  px-6
+                  py-4
+
+                  font-semibold
+                  font-admin
+
+                  text-on-surface
+                "
+              >
                 {category.nombre}
               </td>
 
-              <td className="p-3">
+              {/* DESCRIPCION */}
+              <td
+                className="
+                  px-6
+                  py-4
+
+                  text-sm
+                  text-on-surface-variant
+                "
+              >
                 {category.descripcion || "-"}
               </td>
 
-              <td className="p-3">
+              {/* PARENT */}
+              <td
+                className="
+                  px-6
+                  py-4
+
+                  text-sm
+                  text-on-surface-variant
+                "
+              >
                 {category.parent_id ?? "-"}
               </td>
 
-              <td className="p-3">
-                <div className="flex gap-2">
+              {/* ACTIONS */}
+              <td className="px-6 py-4">
 
+                <div className="flex gap-3">
+
+                  {/* EDIT */}
                   <Button
                     variant="secondary"
                     onClick={() =>
                       onEdit(category)
                     }
+                    className="
+                      border
+                      border-outline
+
+                      bg-surface-container
+
+                      text-on-surface
+
+                      hover:bg-surface-container-high
+                    "
                   >
                     Editar
                   </Button>
 
+                  {/* DELETE */}
                   <Button
                     variant="danger"
                     onClick={() =>
                       onDelete(category.id)
                     }
+                    className="
+                      bg-error
+                      text-white
+
+                      hover:opacity-90
+                    "
                   >
                     Eliminar
                   </Button>
 
                 </div>
+
               </td>
 
             </tr>
+
           ))}
+
+          {/* EMPTY */}
+          {categories.length === 0 && (
+
+            <tr>
+
+              <td
+                colSpan={4}
+                className="
+                  px-6
+                  py-10
+
+                  text-center
+                  text-sm
+
+                  text-on-surface-variant
+                "
+              >
+                No hay categorías registradas
+              </td>
+
+            </tr>
+
+          )}
+
         </tbody>
 
       </table>
+
     </div>
   );
 };

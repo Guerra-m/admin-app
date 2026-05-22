@@ -1,14 +1,15 @@
 import { IngredientFormModal } from "../components/IngredientFormModal";
-
 import { IngredientsTable } from "../components/IngredientsTable";
 
-import { useIngredients } from "../hooks/useIngredients";
+import { Button } from "../../../shared/components/Button";
 
+import { useIngredients } from "../hooks/useIngredients";
 import { useIngredientForm } from "../hooks/useIngredientForm";
 
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
 export const IngredientsPage = () => {
+
   const {
     data = [],
     isLoading,
@@ -37,46 +38,143 @@ export const IngredientsPage = () => {
   } = useIngredientForm();
 
   return (
-    <section className="space-y-4">
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">
-          Ingredientes
-        </h1>
+    <section className="space-y-stack-lg">
 
-        <button
+      {/* Header */}
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+        "
+      >
+
+        <div>
+
+          <h1
+            className="
+              text-3xl
+              font-bold
+              text-primary
+              font-store
+            "
+          >
+            Ingredientes
+          </h1>
+
+          <p
+            className="
+              text-sm
+              text-on-surface-variant
+              font-admin
+              mt-1
+            "
+          >
+            Gestión completa de ingredientes del sistema
+          </p>
+
+        </div>
+
+        <Button
           type="button"
           onClick={startCreate}
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           Nuevo ingrediente
-        </button>
+        </Button>
+
       </div>
 
+      {/* Error Form */}
       {formError && (
-        <p className="rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-700">
+
+        <div
+          className="
+            rounded-md
+            border
+            border-error
+
+            bg-error/10
+
+            px-4
+            py-3
+
+            text-sm
+            text-error
+
+            shadow-sm
+          "
+        >
           {formError}
-        </p>
+        </div>
+
       )}
 
+      {/* Loading */}
       {isLoading && (
-        <p>Cargando ingredientes...</p>
+
+        <div
+          className="
+            rounded-lg
+            bg-surface-container
+            p-6
+            text-on-surface-variant
+            shadow-warm
+          "
+        >
+          Cargando ingredientes...
+        </div>
+
       )}
 
+      {/* Error API */}
       {isError && (
-        <p className="text-red-700">
-          {getApiErrorMessage(error)}
-        </p>
+
+        <div
+          className="
+            rounded-lg
+            border
+            border-error
+
+            bg-error/10
+
+            p-4
+
+            text-error
+          "
+        >
+          Error: {getApiErrorMessage(error)}
+        </div>
+
       )}
 
+      {/* Table */}
       {!isLoading && !isError && (
-        <IngredientsTable
-          ingredients={data}
-          onEdit={startEdit}
-          onDelete={(id) => void onDelete(id)}
-        />
+
+        <div
+          className="
+            rounded-xl
+            bg-surface-container-lowest
+            border
+            border-outline-variant
+
+            shadow-warm
+
+            overflow-hidden
+          "
+        >
+
+          <IngredientsTable
+            ingredients={data}
+            onEdit={startEdit}
+            onDelete={(id) => void onDelete(id)}
+          />
+
+        </div>
+
       )}
 
+      {/* Modal */}
       <IngredientFormModal
         open={open}
         editing={editing}

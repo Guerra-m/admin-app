@@ -20,7 +20,7 @@ export const Sidebar = () => {
         </h1>
         
         <p className="text-sm text-on-surface-variant">
-          Operations Management
+          Administrador de operaciones
         </p>
       </div>
 

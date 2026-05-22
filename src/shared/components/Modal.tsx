@@ -7,25 +7,141 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export const Modal = ({ title, open, onClose, children }: ModalProps) => {
+export const Modal = ({
+  title,
+  open,
+  onClose,
+  children,
+}: ModalProps) => {
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 ">
-      <div className="w-full max-w-xl rounded-xl bg-white p-5 shadow-xl">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">{title}</h2>
+
+    <div
+      className="
+        fixed
+        inset-0
+        z-50
+
+        flex
+        items-center
+        justify-center
+
+        bg-black/50
+        backdrop-blur-sm
+
+        p-4
+      "
+    >
+
+      <div
+        className="
+          w-full
+          max-w-xl
+
+          rounded-2xl
+
+          border
+          border-outline-variant
+
+          bg-surface
+
+          shadow-warm
+
+          overflow-hidden
+
+          animate-in
+          fade-in
+          zoom-in-95
+          duration-200
+        "
+      >
+
+        {/* HEADER */}
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+
+            border-b
+            border-outline-variant
+
+            bg-surface-container
+
+            px-6
+            py-5
+          "
+        >
+
+          <div className="space-y-1">
+
+            <h2
+              className="
+                text-xl
+                font-bold
+                font-admin
+
+                text-on-surface
+              "
+            >
+              {title}
+            </h2>
+
+            <p
+              className="
+                text-sm
+                text-on-surface-variant
+              "
+            >
+              Complete la información requerida
+            </p>
+
+          </div>
+
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border px-2 py-1 text-sm hover:bg-gray-100"
+            className="
+              flex
+              items-center
+              justify-center
+
+              rounded-lg
+
+              border
+              border-outline-variant
+
+              bg-surface-container-low
+
+              p-2
+
+              text-on-surface-variant
+
+              transition-all
+              duration-200
+
+              hover:bg-surface-container-high
+              hover:text-on-surface
+            "
           >
-            Cerrar
+
+            <span className="material-symbols-outlined text-[20px]">
+              close
+            </span>
+
           </button>
+
         </div>
 
-        {children}
+        {/* CONTENT */}
+        <div className="p-6">
+          {children}
+        </div>
+
       </div>
+
     </div>
   );
 };
