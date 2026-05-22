@@ -1,5 +1,5 @@
-import type { CategoriaRead } from "../../categories/types/CategoriaRead";
-import type { IngredienteRead } from "../../ingredients/types/IngredienteRead";
+import type { CategoriaRead } from "../../categories/types/Categories";
+import type { IngredienteRead } from "../../ingredients/types/Ingredients";
 
 export interface Categoria {
   id: number;
@@ -16,7 +16,7 @@ export interface ProductoCreate {
   descripcion?: string;
   precio_base: number;
 
-  imagenes_url?: string[];
+  imagenes_url?: string;
   stock_cantidad?: number;
   disponible?: boolean;
 
@@ -31,7 +31,7 @@ export interface ProductoRead {
   descripcion?: string;
   precio_base: number;
 
-  imagenes_url: string[];
+  imagenes_url: string;
 
   stock_cantidad: number;
   disponible: boolean;
@@ -49,7 +49,7 @@ export interface ProductoUpdate {
   descripcion?: string;
   precio_base?: number;
 
-  imagenes_url?: string[];
+  imagenes_url?: string;
   stock_cantidad?: number;
   disponible?: boolean;
 

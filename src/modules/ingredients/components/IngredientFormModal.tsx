@@ -1,7 +1,7 @@
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
 
-import type { IngredienteRead } from "../types/IngredienteRead";
+import type { IngredienteRead } from "../types/Ingredients";
 
 type IngredientFormState = {
   nombre: string;

@@ -4,13 +4,13 @@ import { LoginPage } from '../modules/auth/components/LoginPage';
 import { PrivateRoute } from '../modules/auth/components/PrivateRoute';
 import { RoleRoute } from '../modules/auth/components/RoleRoute';
 
-import { MainLayout } from '../shared/layouts/components/MainLayout';
+import { MainLayout } from '../shared/layouts/MainLayout';
 
 import { ProductsPage } from '../modules/products/pages/ProductsPage';
 import { ProductDetailPage } from '../modules/products/pages/ProductDetailPage';
 import { IngredientsPage } from '../modules/ingredients/pages/IngredientsPage';
 import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
-import { OrdersPage} from '../modules/orders/pages/OrdersPage';
+import { OrdersPage } from '../modules/orders/pages/OrdersPage';
 import { ProfilePage } from '../modules/profile/pages/ProfilePage';
 export const AppRouter = () => {
 
@@ -77,7 +77,7 @@ export const AppRouter = () => {
             path="/pedidos"
             element={
               <RoleRoute roles={["ADMIN"]}>
-                <OrdersPage/>
+                <OrdersPage />
               </RoleRoute>
             }
           />
@@ -86,7 +86,7 @@ export const AppRouter = () => {
             path="/perfil"
             element={
               <RoleRoute roles={["ADMIN", "STOCK", "CLIENT", "PEDIDOS"]}>
-                <ProfilePage/>
+                <ProfilePage />
               </RoleRoute>
             }
           />

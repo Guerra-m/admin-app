@@ -1,9 +1,9 @@
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
 
-import type { CategoriaRead } from "../../categories/types/CategoriaRead";
-import type { IngredienteRead } from "../../ingredients/types/IngredienteRead";
-import type { ProductoRead } from "../../products/types/ProductoRead";
+import type { CategoriaRead,  } from "../../categories/types/Categories";
+import type { IngredienteRead } from "../../ingredients/types/Ingredients";
+import type { ProductoRead } from "../../products/types/Producto";
 
 type ProductFormState = {
   nombre: string;
