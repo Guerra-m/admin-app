@@ -23,7 +23,7 @@ export const LoginPage = () => {
     setLoading(false);
 
     if (success) {
-      navigate("/productos");
+      navigate("/");
     } else {
       setError("Credenciales incorrectas");
     }
@@ -74,7 +74,29 @@ export const LoginPage = () => {
           <p className="text-red-500 text-sm mt-4 text-center">
             {error}
           </p>
+
         )}
+        <p className="text-gray-500 text-sm mt-4 text-center">
+          Usuarios de prueba:
+        </p>
+
+        <div className="mt-2 space-y-1 text-xs text-gray-600 text-center">
+          <p>
+            ADMIN: admin@example.com / Admin1234!
+          </p>
+
+          <p>
+            STOCK: stock@example.com / Stock1234!
+          </p>
+
+          <p>
+            PEDIDOS: pedidos@example.com / Pedidos1234!
+          </p>
+
+          <p>
+            CLIENT: juan@example.com / Juan1234!
+          </p>
+        </div>
 
       </div>
     </div>

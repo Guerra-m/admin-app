@@ -1,7 +1,7 @@
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
 
-import type { CategoriaRead } from "../types/CategoriaRead";
+import type { CategoriaRead } from "../types/Categories";
 
 type CategoryFormState = {
   nombre: string;
@@ -33,7 +33,9 @@ export const CategoryFormModal = ({
   onChange,
   onSubmit,
 }: Props) => {
+
   return (
+
     <Modal
       open={open}
       onClose={onClose}
@@ -43,76 +45,266 @@ export const CategoryFormModal = ({
           : "Nueva categoría"
       }
     >
+
       <form
-        className="grid gap-3"
+        className="grid gap-5 font-admin"
         onSubmit={(event) =>
           void onSubmit(event)
         }
       >
-        <input
-          value={form.nombre}
-          onChange={(event) =>
-            onChange({
-              ...form,
-              nombre: event.target.value,
-            })
-          }
-          className="rounded-md border p-2"
-          placeholder="Nombre"
-        />
 
-        <textarea
-          value={form.descripcion}
-          onChange={(event) =>
-            onChange({
-              ...form,
-              descripcion: event.target.value,
-            })
-          }
-          className="rounded-md border p-2"
-          placeholder="Descripción"
-        />
+        {/* NOMBRE */}
+        <div className="space-y-2">
 
-        <input
-          value={form.imagen_url}
-          onChange={(event) =>
-            onChange({
-              ...form,
-              imagen_url: event.target.value,
-            })
-          }
-          className="rounded-md border p-2"
-          placeholder="URL imagen"
-        />
+          <label
+            className="
+              text-sm
+              font-semibold
+              text-on-surface
+            "
+          >
+            Nombre
+          </label>
 
-        {!editing && (
           <input
-            value={form.parent_id}
+            value={form.nombre}
             onChange={(event) =>
               onChange({
                 ...form,
-                parent_id: event.target.value,
+                nombre: event.target.value,
               })
             }
-            className="rounded-md border p-2"
-            placeholder="Parent ID (opcional)"
-            type="number"
-            min={1}
+            className="
+              w-full
+
+              rounded-lg
+
+              border
+              border-outline
+
+              bg-surface-container-low
+
+              px-4
+              py-3
+
+              text-on-surface
+              placeholder:text-on-surface-variant
+
+              outline-none
+
+              transition-all
+              duration-200
+
+              focus:border-primary
+              focus:ring-2
+              focus:ring-primary/20
+            "
+            placeholder="Ingrese el nombre"
           />
+
+        </div>
+
+        {/* DESCRIPCION */}
+        <div className="space-y-2">
+
+          <label
+            className="
+              text-sm
+              font-semibold
+              text-on-surface
+            "
+          >
+            Descripción
+          </label>
+
+          <textarea
+            value={form.descripcion}
+            onChange={(event) =>
+              onChange({
+                ...form,
+                descripcion: event.target.value,
+              })
+            }
+            className="
+              min-h-[120px]
+              w-full
+
+              rounded-lg
+
+              border
+              border-outline
+
+              bg-surface-container-low
+
+              px-4
+              py-3
+
+              text-on-surface
+              placeholder:text-on-surface-variant
+
+              outline-none
+
+              transition-all
+              duration-200
+
+              focus:border-primary
+              focus:ring-2
+              focus:ring-primary/20
+            "
+            placeholder="Ingrese una descripción"
+          />
+
+        </div>
+
+        {/* IMAGEN */}
+        <div className="space-y-2">
+
+          <label
+            className="
+              text-sm
+              font-semibold
+              text-on-surface
+            "
+          >
+            URL de imagen
+          </label>
+
+          <input
+            value={form.imagen_url}
+            onChange={(event) =>
+              onChange({
+                ...form,
+                imagen_url: event.target.value,
+              })
+            }
+            className="
+              w-full
+
+              rounded-lg
+
+              border
+              border-outline
+
+              bg-surface-container-low
+
+              px-4
+              py-3
+
+              text-on-surface
+              placeholder:text-on-surface-variant
+
+              outline-none
+
+              transition-all
+              duration-200
+
+              focus:border-primary
+              focus:ring-2
+              focus:ring-primary/20
+            "
+            placeholder="https://..."
+          />
+
+        </div>
+
+        {/* PARENT ID */}
+        {!editing && (
+
+          <div className="space-y-2">
+
+            <label
+              className="
+                text-sm
+                font-semibold
+                text-on-surface
+              "
+            >
+              Parent ID
+            </label>
+
+            <input
+              value={form.parent_id}
+              onChange={(event) =>
+                onChange({
+                  ...form,
+                  parent_id: event.target.value,
+                })
+              }
+              className="
+                w-full
+
+                rounded-lg
+
+                border
+                border-outline
+
+                bg-surface-container-low
+
+                px-4
+                py-3
+
+                text-on-surface
+                placeholder:text-on-surface-variant
+
+                outline-none
+
+                transition-all
+                duration-200
+
+                focus:border-primary
+                focus:ring-2
+                focus:ring-primary/20
+              "
+              placeholder="Opcional"
+              type="number"
+              min={1}
+            />
+
+          </div>
+
         )}
 
+        {/* ERROR */}
         {formError && (
-          <p className="text-sm text-red-700">
+
+          <div
+            className="
+              rounded-lg
+
+              border
+              border-error/30
+
+              bg-red-50
+
+              px-4
+              py-3
+
+              text-sm
+              text-error
+            "
+          >
             {formError}
-          </p>
+          </div>
+
         )}
 
-        <div className="flex justify-end gap-2">
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-3 pt-2">
 
           <Button
             type="button"
             variant="secondary"
             onClick={onClose}
+            className="
+              border
+              border-outline
+
+              bg-surface-container
+
+              text-on-surface
+
+              hover:bg-surface-container-high
+            "
           >
             Cancelar
           </Button>
@@ -120,6 +312,14 @@ export const CategoryFormModal = ({
           <Button
             type="submit"
             disabled={isSubmitting}
+            className="
+              bg-primary
+              text-on-primary
+
+              hover:opacity-90
+
+              shadow-warm
+            "
           >
             {editing
               ? "Guardar cambios"
@@ -127,7 +327,9 @@ export const CategoryFormModal = ({
           </Button>
 
         </div>
+
       </form>
+
     </Modal>
   );
 };
