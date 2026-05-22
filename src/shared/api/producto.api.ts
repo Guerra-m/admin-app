@@ -1,8 +1,7 @@
 import { http } from "../api/http";
 
-import type { ProductoRead } from "../../modules/products/types/ProductoRead";
-import type { ProductoCreate } from "../../modules/products/types/ProductoCreate";
-import type { ProductoUpdate } from "../../modules/products/types/ProductoUpdate";
+import type { ProductoRead, ProductoCreate, ProductoUpdate } from "../../modules/products/types/Producto";
+
 
 export const getProducts = async (params?: {
   min_precio?: number;

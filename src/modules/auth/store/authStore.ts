@@ -1,62 +1,76 @@
-import { create } from "zustand"
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { User, LoginCredentials } from "../types"
+import type { User } from "../types";
+import { userApi } from "../../../shared/api/user.api";
 
 type AuthState = {
-    user: User | null;
-    isAuthenticated: boolean;
-    error: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
 
-    login: (credentials: LoginCredentials) => boolean;
-    logout: () => void;
-}
+  setUser: (user: User | null) => void;
+  setAuth: (value: boolean) => void;
+  setLoading: (value: boolean) => void;
+  setError: (msg: string | null) => void;
 
-const hardcodedUser: User = {
-    email: "pepe@gmail.com",
-    password: "pepePassword23"
-}
+  clear: () => void;
+  logout: () => Promise<void>;
+};
 
 export const useAuthStore = create<AuthState>()(
-    persist(
-        (set) => ({
+  persist(
+    (set) => ({
+      user: null,
+      isAuthenticated: false,
+      loading: false,
+      error: null,
+
+      setUser: (user) => set({ user }),
+
+      setAuth: (value) => set({ isAuthenticated: value }),
+
+      setLoading: (value) => set({ loading: value }),
+
+      setError: (msg) => set({ error: msg }),
+
+      // 🔥 Limpieza total del estado
+      clear: () => {
+        set({
+          user: null,
+          isAuthenticated: false,
+          loading: false,
+          error: null,
+        });
+
+        localStorage.removeItem("auth-storage");
+      },
+
+      // 🚪 LOGOUT REAL (backend + frontend)
+      logout: async () => {
+        try {
+          await userApi.logout(); // llama backend para borrar cookie
+        } catch (err) {
+          console.warn("Logout backend falló, limpiando igual");
+        } finally {
+          set({
             user: null,
             isAuthenticated: false,
+            loading: false,
             error: null,
+          });
 
-            login: (credentials) => {
-
-                const isValid =
-                    credentials.email === hardcodedUser.email &&
-                    credentials.password === hardcodedUser.password;
-
-                if (isValid) {
-
-                    set({
-                        user: hardcodedUser,
-                        isAuthenticated: true,
-                        error: null
-                    });
-
-                    return true;
-                }
-
-                set({
-                    error: "Credenciales incorrectas"
-                });
-
-                return false;
-            },
-
-            logout: () => {
-                set({
-                    user: null,
-                    isAuthenticated: false,
-                    error: null
-                });
-            }
-        }),
-        {
-            name: "auth-storage"
+          localStorage.removeItem("auth-storage");
         }
-    )
+      },
+    }),
+    {
+      name: "auth-storage",
+
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
+    }
+  )
 );
