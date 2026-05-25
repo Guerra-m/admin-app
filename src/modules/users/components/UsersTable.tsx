@@ -7,25 +7,14 @@ import type {
 
 type Props = {
   users: UsuarioReadWithRoles[];
-
   roles: RolRead[];
 
-  onAssignRole: (
-    usuarioId: number,
-    rolCodigo: string,
-  ) => void;
-
-  onRevokeRole: (
-    usuarioId: number,
-    rolCodigo: string,
-  ) => void;
+  onOpenRoles: (user: UsuarioReadWithRoles) => void;
 };
 
 export const UsersTable = ({
   users,
-  roles,
-  onAssignRole,
-  onRevokeRole,
+  onOpenRoles,
 }: Props) => {
   return (
     <div
@@ -43,32 +32,17 @@ export const UsersTable = ({
         {/* HEADER */}
         <thead
           className="
-            border-b
-            border-outline-variant
             bg-surface-container
             text-on-surface
+            border-b
+            border-outline-variant
           "
         >
           <tr>
-            <th className="p-4 text-left font-semibold">
-              Usuario
-            </th>
-
-            <th className="p-4 text-left font-semibold">
-              Email
-            </th>
-
-            <th className="p-4 text-left font-semibold">
-              Celular
-            </th>
-
-            <th className="p-4 text-left font-semibold">
-              Roles
-            </th>
-
-            <th className="p-4 text-left font-semibold">
-              Gestión
-            </th>
+            <th className="p-4 text-left font-semibold">Usuario</th>
+            <th className="p-4 text-left font-semibold">Email</th>
+            <th className="p-4 text-left font-semibold">Roles</th>
+            <th className="p-4 text-left font-semibold">Acciones</th>
           </tr>
         </thead>
 
@@ -81,7 +55,6 @@ export const UsersTable = ({
                 border-b border-outline-variant/40
                 transition-colors duration-200
                 hover:bg-surface-container-low
-
                 ${
                   index % 2 === 0
                     ? "bg-surface-container-lowest"
@@ -89,20 +62,12 @@ export const UsersTable = ({
                 }
               `}
             >
-
               {/* USER */}
               <td className="p-4">
                 <div className="font-semibold text-on-surface">
                   {user.nombre} {user.apellido}
                 </div>
-
-                <div
-                  className="
-                    mt-1
-                    text-xs
-                    text-on-surface-variant
-                  "
-                >
+                <div className="text-xs text-on-surface-variant mt-1">
                   ID #{user.id}
                 </div>
               </td>
@@ -112,15 +77,9 @@ export const UsersTable = ({
                 {user.email}
               </td>
 
-              {/* PHONE */}
-              <td className="p-4 text-on-surface">
-                {user.celular || "-"}
-              </td>
-
               {/* ROLES */}
               <td className="p-4">
                 <div className="flex flex-wrap gap-2">
-
                   {user.roles.length > 0 ? (
                     user.roles.map((role) => (
                       <span
@@ -129,10 +88,8 @@ export const UsersTable = ({
                           inline-flex
                           rounded-full
                           bg-primary/10
-                          px-3
-                          py-1
-                          text-xs
-                          font-semibold
+                          px-3 py-1
+                          text-xs font-semibold
                           text-primary
                         "
                       >
@@ -144,50 +101,18 @@ export const UsersTable = ({
                       Sin roles
                     </span>
                   )}
-
                 </div>
               </td>
 
               {/* ACTIONS */}
               <td className="p-4">
-                <div className="flex flex-wrap gap-2">
-
-                  {roles.map((role) => {
-                    const hasRole =
-                      user.roles.includes(role.codigo);
-
-                    return hasRole ? (
-                      <Button
-                        key={role.codigo}
-                        variant="danger"
-                        onClick={() =>
-                          onRevokeRole(
-                            user.id,
-                            role.codigo,
-                          )
-                        }
-                      >
-                        Quitar {role.codigo}
-                      </Button>
-                    ) : (
-                      <Button
-                        key={role.codigo}
-                        variant="secondary"
-                        onClick={() =>
-                          onAssignRole(
-                            user.id,
-                            role.codigo,
-                          )
-                        }
-                      >
-                        Dar {role.codigo}
-                      </Button>
-                    );
-                  })}
-
-                </div>
+                <Button
+                  variant="secondary"
+                  onClick={() => onOpenRoles(user)}
+                >
+                  Roles
+                </Button>
               </td>
-
             </tr>
           ))}
         </tbody>
