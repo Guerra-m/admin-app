@@ -1,46 +1,27 @@
 import { http } from "./http";
-import type {
-  PedidoRead,
-  EstadoPedidoRead,
-  AvanzarEstadoRequest,
-} from "../../modules/orders/types/Pedido";
+import type { PedidoRead, PedidoReadDetalle } from "../../modules/orders/types/Order";
 
-// ─────────────────────────────
-// GET PEDIDOS
-// ─────────────────────────────
-export const getPedidos = async (): Promise<PedidoRead[]> => {
-  const res = await http.get("/api/v1/pedidos", {
-    withCredentials: true,
-  });
-
+export const getPedidos = async (params?: {
+  offset?: number;
+  limit?: number;
+}): Promise<PedidoRead[]> => {
+  const res = await http.get("/api/v1/pedidos/", { params });
   return res.data;
 };
 
-// ─────────────────────────────
-// GET ESTADOS
-// ─────────────────────────────
-export const getEstadosPedido = async (): Promise<
-  EstadoPedidoRead[]
-> => {
-  const res = await http.get("/api/v1/estados-pedido", {
-    withCredentials: true,
-  });
-
+export const getPedidoById = async (id: number): Promise<PedidoReadDetalle> => {
+  const res = await http.get(`/api/v1/pedidos/${id}`);
   return res.data;
 };
 
-// ─────────────────────────────
-// AVANZAR ESTADO
-// ─────────────────────────────
-export const avanzarEstadoPedido = async (
+export const avanzarEstado = async (
   pedidoId: number,
-  data: AvanzarEstadoRequest,
-) => {
-  const res = await http.post(
-    `/api/v1/pedidos/${pedidoId}/avanzar`,
-    data,
-    { withCredentials: true },
-  );
-
+  estado_hacia: string,
+  motivo?: string
+): Promise<PedidoRead> => {
+  const res = await http.post(`/api/v1/pedidos/${pedidoId}/avanzar`, {
+    estado_hacia,
+    motivo,
+  });
   return res.data;
 };
