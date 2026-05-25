@@ -6,13 +6,13 @@ import type { PedidoRead } from "../types/Pedido";
 export const OrdersPage = () => {
   const [orders, setOrders] = useState<PedidoRead[]>([]);
 
-  useEffect(() => {
-    const load = async () => {
-      const data = await getPedidos();
-      setOrders(data);
-    };
+  const loadOrders = async () => {
+    const data = await getPedidos();
+    setOrders(data);
+  };
 
-    load();
+  useEffect(() => {
+    loadOrders();
   }, []);
 
   return (
@@ -21,7 +21,10 @@ export const OrdersPage = () => {
         Panel de Pedidos
       </h1>
 
-      <OrdersBoard orders={orders} />
+      <OrdersBoard
+        orders={orders}
+        onRefresh={loadOrders}
+      />
     </section>
   );
 };
