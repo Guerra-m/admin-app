@@ -74,6 +74,12 @@ export const useProductForm = () => {
   const [form, setForm] = useState<ProductFormState>(emptyForm);
   const [formError, setFormError] = useState("");
 
+  const [viewing, setViewing] =
+    useState<ProductoRead | null>(null);
+
+  const [detailOpen, setDetailOpen] =
+    useState(false);
+
   const startCreate = () => {
     setEditing(null);
     setForm(emptyForm);
@@ -86,6 +92,11 @@ export const useProductForm = () => {
     setForm(toForm(product));
     setFormError("");
     setOpen(true);
+  };
+
+  const startView = (product: ProductoRead) => {
+    setViewing(product);
+    setDetailOpen(true);
   };
 
   const syncRelations = async (
@@ -243,6 +254,11 @@ export const useProductForm = () => {
     onDelete,
     toggleId,
 
+    viewing,
+    detailOpen,
+    setDetailOpen,
+
+    startView,
     isSubmitting:
       createProduct.isPending || updateProduct.isPending,
   };
