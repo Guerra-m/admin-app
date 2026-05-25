@@ -68,7 +68,7 @@ export const AppRouter = () => {
           <Route
             path="/pedidos"
             element={
-              <RoleRoute roles={["ADMIN"]}>
+              <RoleRoute roles={["ADMIN", "PEDIDOS"]}>
                 <OrdersPage />
               </RoleRoute>
             }

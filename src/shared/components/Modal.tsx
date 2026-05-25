@@ -37,25 +37,25 @@ export const Modal = ({
 
       <div
         className="
-          w-full
-          max-w-xl
+    w-full
+    max-w-xl
+    max-h-[90vh]
+    flex
+    flex-col
 
-          rounded-2xl
+    rounded-2xl
+    border
+    border-outline-variant
+    bg-surface
+    shadow-warm
 
-          border
-          border-outline-variant
+    overflow-hidden
 
-          bg-surface
-
-          shadow-warm
-
-          overflow-hidden
-
-          animate-in
-          fade-in
-          zoom-in-95
-          duration-200
-        "
+    animate-in
+    fade-in
+    zoom-in-95
+    duration-200
+  "
       >
 
         {/* HEADER */}
@@ -136,7 +136,7 @@ export const Modal = ({
         </div>
 
         {/* CONTENT */}
-        <div className="p-6">
+        <div className="p-6 max-h-[80vh] overflow-y-auto">
           {children}
         </div>
 
