@@ -62,7 +62,7 @@ export const Sidebar = () => {
 
         </div>
         
-        <p className="text-sm text-on-surface-variant">
+        <p className="text-sm text-on-surface-variant px-3">
           Administrador de operaciones
         </p>
       </div>

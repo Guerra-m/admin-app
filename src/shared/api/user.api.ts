@@ -1,13 +1,13 @@
 import { http } from "./http";
-import type { User, LoginResponse, RegisterRequest } from "../../modules/auth/types/";
-
+import type {  LoginResponse, RegisterRequest } from "../../modules/auth/types/";
+import type { UsuarioReadWithRoles } from "../../modules/auth/types/User";
 // ─────────────────────────────────────────────
 // AUTH API
 // ─────────────────────────────────────────────
 
 export const userApi = {
   // Registro de usuario
-  register: async (data: RegisterRequest): Promise<User> => {
+  register: async (data: RegisterRequest): Promise<UsuarioReadWithRoles> => {
     const res = await http.post("/api/v1/auth/register", data);
     return res.data;
   },
@@ -29,7 +29,7 @@ export const userApi = {
   },
 
   // Obtener usuario actual (/me)
-  me: async (): Promise<User> => {
+  me: async (): Promise<UsuarioReadWithRoles> => {
     const res = await http.get("/api/v1/auth/me", {
       withCredentials: true,
     });

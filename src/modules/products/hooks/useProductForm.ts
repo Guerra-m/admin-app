@@ -38,19 +38,23 @@ const emptyForm: ProductFormState = {
   ingredienteIds: [],
 };
 
-const toForm = (product: ProductoRead): ProductFormState => ({
+const toForm = (
+  product: ProductoRead
+): ProductFormState => ({
   nombre: product.nombre,
   descripcion: product.descripcion ?? "",
   precio_base: String(product.precio_base),
 
-  // 👇 backend string → frontend string
   imagenes_url: product.imagenes_url ?? "",
 
   stock_cantidad: String(product.stock_cantidad),
   disponible: product.disponible,
 
-  categoriaIds: product.categorias.map((item) => item.id),
-  ingredienteIds: product.ingredientes.map((item) => item.id),
+  categoriaIds:
+    product.categorias?.map((item) => item.id) ?? [],
+
+  ingredienteIds:
+    product.ingredientes?.map((item) => item.id) ?? [],
 });
 
 const toggleId = (ids: number[], id: number) =>
@@ -91,10 +95,10 @@ export const useProductForm = () => {
     currentProduct?: ProductoRead,
   ) => {
     const currentCategoryIds =
-      currentProduct?.categorias.map((c) => c.id) ?? [];
+      currentProduct?.categorias?.map((c) => c.id) ?? [];
 
     const currentIngredientIds =
-      currentProduct?.ingredientes.map((i) => i.id) ?? [];
+      currentProduct?.ingredientes?.map((i) => i.id) ?? [];
 
     const categoriesToAdd = selectedCategoryIds.filter(
       (id) => !currentCategoryIds.includes(id),
