@@ -38,12 +38,12 @@ export const ProductsTable = ({
         shadow-warm
       "
     >
-      <table className="min-w-full text-sm font-admin">
+      <table className="min-w-full table-fixed text-sm font-admin">
 
         {/* HEADER */}
         <thead className="bg-surface-container text-on-surface border-b border-outline-variant">
           <tr>
-            <th className="p-4 text-left font-semibold">Imagen</th>
+            <th className="w-32 p-4 text-left font-semibold">Imagen</th>
             <th className="p-4 text-left font-semibold">Nombre</th>
             <th className="p-4 text-left font-semibold">Precio</th>
             <th className="p-4 text-left font-semibold">Stock</th>
@@ -57,6 +57,7 @@ export const ProductsTable = ({
         {/* BODY */}
         <tbody>
           {products.map((product, index) => {
+            console.log(product);
             const images = getImages(product.imagenes_url);
             const coverImage = images[0];
 
@@ -75,17 +76,23 @@ export const ProductsTable = ({
               >
 
                 {/* IMAGE */}
-                <td className="p-4">
+                <td className="w-32 min-w-32 max-w-32 p-4">
                   {coverImage ? (
                     <img
                       src={coverImage}
                       alt={product.nombre}
                       className="
-                        h-24 w-24
+                        h-24
+                        w-24
+                        min-w-24http://localhost:5173/categorias
+                        min-h-24
+
                         rounded-lg
                         border border-outline-variant
+
                         object-cover
-                      "
+                        shrink-0
+"
                       referrerPolicy="no-referrer"
                     />
                   ) : (
