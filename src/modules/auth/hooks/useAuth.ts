@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import type { LoginCredentials, RegisterRequest, UsuarioReadWithRoles } from "../types/User";
 
 export const useAuth = () => {
-  const { setUser, setAuth, setLoading, setError, clear } = useAuthStore();
+  const { setUser, setAuth, setLoading, setError,  } = useAuthStore();
 
   const login = async (credentials: LoginCredentials) => {
     setLoading(true);
@@ -42,7 +42,6 @@ export const useAuth = () => {
   };
 
   const logout = () => {
-  clear();
 };
 
   const getMe = async () => {
@@ -51,7 +50,6 @@ export const useAuth = () => {
       setUser(user);
       setAuth(true);
     } catch {
-      clear();
     }
   };
 

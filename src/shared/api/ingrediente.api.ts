@@ -1,50 +1,55 @@
 import { http } from "../api/http";
 
-import type { IngredienteRead, 
-  IngredienteCreate, 
-  IngredienteUpdate } from "../../modules/ingredients/types/Ingredients";
+import type {
+  IngredienteRead,
+  IngredienteCreate,
+  IngredienteUpdate
+} from "../../modules/ingredients/types/Ingredients";
 
+const BASE = "/api/v1/ingredientes";
 
-/**
- * POST /ingredientes
- */
+/* ─────────────────────────────────────────────────────────────
+   POST /api/v1/ingredientes
+───────────────────────────────────────────────────────────── */
 export const createIngredient = async (
   data: IngredienteCreate
 ): Promise<IngredienteRead> => {
-  const res = await http.post("/ingredientes/", data);
+  const res = await http.post(`${BASE}/`, data);
   return res.data;
 };
 
-/**
- * GET /ingredientes
- */
+/* ─────────────────────────────────────────────────────────────
+   GET /api/v1/ingredientes
+───────────────────────────────────────────────────────────── */
 export const getIngredients = async (): Promise<IngredienteRead[]> => {
-  const res = await http.get("/ingredientes/");
+  const res = await http.get(`${BASE}/`);
   return res.data;
 };
 
-/**
- * GET /ingredientes/{id}
- */
-export const getIngredientById = async (id: number): Promise<IngredienteRead> => {
-  const res = await http.get(`/ingredientes/${id}`);
+/* ─────────────────────────────────────────────────────────────
+   GET /api/v1/ingredientes/{id}
+───────────────────────────────────────────────────────────── */
+export const getIngredientById = async (
+  id: number
+): Promise<IngredienteRead> => {
+  const res = await http.get(`${BASE}/${id}`);
   return res.data;
 };
 
-/**
- * PUT /ingredientes/{id}
- */
+/* ─────────────────────────────────────────────────────────────
+   PUT /api/v1/ingredientes/{id}
+───────────────────────────────────────────────────────────── */
 export const updateIngredient = async (
   id: number,
   data: IngredienteUpdate
 ): Promise<IngredienteRead> => {
-  const res = await http.put(`/ingredientes/${id}`, data);
+  const res = await http.put(`${BASE}/${id}`, data);
   return res.data;
 };
 
-/**
- * DELETE /ingredientes/{id}
- */
+/* ─────────────────────────────────────────────────────────────
+   DELETE /api/v1/ingredientes/{id}
+───────────────────────────────────────────────────────────── */
 export const deleteIngredient = async (id: number): Promise<void> => {
-  await http.delete(`/ingredientes/${id}`);
+  await http.delete(`${BASE}/${id}`);
 };

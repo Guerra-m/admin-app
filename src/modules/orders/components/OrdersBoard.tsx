@@ -1,55 +1,28 @@
 import { OrderColumn } from "./OrderColumn";
+import type { PedidoRead, EstadoPedido } from "../types/Pedido";
 
-const orders = [
-  {
-    id: 1,
-    cliente: "Juan",
-    estado: "aprobado",
-  },
-  {
-    id: 2,
-    cliente: "Ana",
-    estado: "en_proceso",
-  },
-  {
-    id: 3,
-    cliente: "Luis",
-    estado: "listo",
-  },
-  {
-    id: 4,
-    cliente: "Luis",
-    estado: "listo",
-  },
-  {
-    id: 5,
-    cliente: "Luis",
-    estado: "aprobado",
-  },
-  {
-    id: 6,
-    cliente: "Luis",
-    estado: "entregado",
-  },
+type Props = {
+  orders: PedidoRead[];
+};
+
+const statuses: EstadoPedido[] = [
+  "PENDIENTE",
+  "CONFIRMADO",
+  "EN_PREP",
+  "LISTO",
+  "ENTREGADO",
+  "CANCELADO",
 ];
 
-const statuses = [
-  "aprobado",
-  "en_proceso",
-  "listo",
-  "entregado",
-];
-
-export const OrdersBoard = () => {
+export const OrdersBoard = ({ orders }: Props) => {
   return (
-    <div className="grid grid-cols-4 gap-1">
+    <div className="grid grid-cols-6 gap-4">
       {statuses.map((status) => (
         <OrderColumn
           key={status}
           title={status}
           orders={orders.filter(
-            (order) =>
-              order.estado === status
+            (order) => order.estado_codigo === status
           )}
         />
       ))}

@@ -1,50 +1,71 @@
-const statusFlow = [
-  "aprobado",
-  "en_proceso",
-  "listo",
-  "entregado",
-];
+import { avanzarEstadoPedido } from "../../../shared/api/pedido.api";
+import type { EstadoPedido } from "../types/Pedido";
 
 type Props = {
-  order: any;
+  order: {
+    id: number;
+    estado_codigo: EstadoPedido;
+    total: number;
+  };
 };
 
-export const OrderCard = ({
-  order,
-}: Props) => {
-  const moveNext = () => {
-    const currentIndex =
-      statusFlow.indexOf(order.estado);
+export const OrderCard = ({ order }: Props) => {
 
-    const nextStatus =
-      statusFlow[currentIndex + 1];
+  const handleAdvance = async () => {
+    let nextState: EstadoPedido | null = null;
 
-    if (!nextStatus) return;
+    switch (order.estado_codigo) {
+      case "PENDIENTE":
+        nextState = "CONFIRMADO";
+        break;
 
-    console.log(
-      "Mover pedido",
-      order.id,
-      "a",
-      nextStatus
-    );
+      case "CONFIRMADO":
+        nextState = "EN_PREP";
+        break;
 
-    // mutation acá
+      case "EN_PREP":
+        nextState = "LISTO";
+        break;
+
+      case "LISTO":
+        nextState = "ENTREGADO";
+        break;
+
+      case "ENTREGADO":
+      case "CANCELADO":
+        return; // estados finales → no avanza
+    }
+
+    if (!nextState) return;
+
+    try {
+      await avanzarEstadoPedido(order.id, {
+        estado_hacia: nextState,
+      });
+
+      console.log("Estado actualizado");
+    } catch (err) {
+      console.error("Error cambiando estado", err);
+    }
   };
 
   return (
-    <article className="rounded-lg bg-white p-4 shadow">
-      <h3 className="font-semibold">
-        Pedido #{order.id}
-      </h3>
+    <div className="p-4 rounded-xl bg-surface-container shadow-warm">
+      <h3 className="font-bold">Pedido #{order.id}</h3>
 
-      <p>{order.cliente}</p>
+      <p>Estado: {order.estado_codigo}</p>
+      <p>Total: ${order.total}</p>
 
       <button
-        onClick={moveNext}
-        className="mt-3 rounded bg-blue-600 px-3 py-1 text-white"
+        onClick={handleAdvance}
+        disabled={
+          order.estado_codigo === "ENTREGADO" ||
+          order.estado_codigo === "CANCELADO"
+        }
+        className="mt-3 bg-primary text-white px-4 py-2 rounded-lg disabled:opacity-50"
       >
-        Avanzar
+        Avanzar estado
       </button>
-    </article>
+    </div>
   );
 };
