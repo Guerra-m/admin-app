@@ -7,7 +7,6 @@ import { RoleRoute } from '../modules/auth/components/RoleRoute';
 import { MainLayout } from '../shared/layouts/MainLayout';
 
 import { ProductsPage } from '../modules/products/pages/ProductsPage';
-import { ProductDetailPage } from '../modules/products/pages/ProductDetailPage';
 import { IngredientsPage } from '../modules/ingredients/pages/IngredientsPage';
 import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
 import { OrdersPage } from '../modules/orders/pages/OrdersPage';
@@ -42,15 +41,7 @@ export const AppRouter = () => {
             }
           />
 
-          {/* DETALLE PRODUCTO */}
-          <Route
-            path="/productos/:id"
-            element={
-              <RoleRoute roles={["ADMIN", "STOCK"]}>
-                <ProductDetailPage />
-              </RoleRoute>
-            }
-          />
+          
 
           {/* CATEGORIAS */}
           <Route

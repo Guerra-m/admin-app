@@ -11,6 +11,7 @@ import { useProductForm } from "../hooks/useProductForm";
 
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
+import { ProductDetailModal } from "../components/ProductDetailModal";
 export const ProductsPage = () => {
   const {
     data = [],
@@ -36,8 +37,13 @@ export const ProductsPage = () => {
 
     formError,
 
+    viewing,
+    detailOpen,
+    setDetailOpen,
+
     startCreate,
     startEdit,
+    startView,
 
     onSubmit,
     onDelete,
@@ -163,6 +169,7 @@ export const ProductsPage = () => {
         >
           <ProductsTable
             products={data}
+            onView={startView}
             onEdit={startEdit}
             onDelete={(id) => void onDelete(id)}
           />
@@ -182,6 +189,12 @@ export const ProductsPage = () => {
         onClose={() => setOpen(false)}
         onChange={setForm}
         onSubmit={onSubmit}
+      />
+      
+      <ProductDetailModal
+        open={detailOpen}
+        product={viewing}
+        onClose={() => setDetailOpen(false)}
       />
 
     </section>

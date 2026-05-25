@@ -15,6 +15,7 @@ import {
 import type {
   CategoriaCreate,
   CategoriaUpdate,
+  CategoriaRead,
 } from "../types/Categories";
 
 export const CATEGORIES_QUERY_KEY = ["categories"] as const;
@@ -23,11 +24,11 @@ export const useCategories = () => {
   const queryClient = useQueryClient();
 
   // GET ALL
-  const categoriesQuery = useQuery({
-    queryKey: CATEGORIES_QUERY_KEY,
+ const categoriesQuery = useQuery<CategoriaRead[]>({
+  queryKey: CATEGORIES_QUERY_KEY,
 
-    queryFn: getCategories,
-  });
+  queryFn: () => getCategories(),
+});
 
   // GET BY ID
   const categoryById = async (id: number) => {

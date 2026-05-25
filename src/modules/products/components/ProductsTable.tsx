@@ -6,7 +6,11 @@ import type { ProductoRead } from "../types/Producto";
 
 type Props = {
   products: ProductoRead[];
+
+  onView: (product: ProductoRead) => void;
+
   onEdit: (product: ProductoRead) => void;
+
   onDelete: (id: number) => void;
 };
 
@@ -19,6 +23,7 @@ const getImages = (value?: string) =>
 
 export const ProductsTable = ({
   products,
+  onView,
   onEdit,
   onDelete,
 }: Props) => {
@@ -62,10 +67,9 @@ export const ProductsTable = ({
                   border-b border-outline-variant/40
                   transition-colors duration-200
                   hover:bg-surface-container-low
-                  ${
-                    index % 2 === 0
-                      ? "bg-surface-container-lowest"
-                      : "bg-surface"
+                  ${index % 2 === 0
+                    ? "bg-surface-container-lowest"
+                    : "bg-surface"
                   }
                 `}
               >
@@ -117,10 +121,9 @@ export const ProductsTable = ({
                   <span
                     className={`
                       inline-flex rounded-full px-3 py-1 text-xs font-semibold
-                      ${
-                        product.stock_cantidad > 0
-                          ? "bg-tertiary/10 text-tertiary"
-                          : "bg-error/10 text-error"
+                      ${product.stock_cantidad > 0
+                        ? "bg-tertiary/10 text-tertiary"
+                        : "bg-error/10 text-error"
                       }
                     `}
                   >
@@ -133,10 +136,9 @@ export const ProductsTable = ({
                   <span
                     className={`
                       inline-flex rounded-full px-3 py-1 text-xs font-semibold
-                      ${
-                        product.disponible
-                          ? "bg-tertiary/10 text-tertiary"
-                          : "bg-error/10 text-error"
+                      ${product.disponible
+                        ? "bg-tertiary/10 text-tertiary"
+                        : "bg-error/10 text-error"
                       }
                     `}
                   >
@@ -162,20 +164,12 @@ export const ProductsTable = ({
                 <td className="p-4">
                   <div className="flex flex-wrap gap-2">
 
-                    <Link
-                      to={`/productos/${product.id}`}
-                      className="
-                        inline-flex items-center justify-center
-                        rounded-md border border-outline-variant
-                        bg-surface-container
-                        px-4 py-2
-                        text-sm font-semibold text-on-surface
-                        transition-all duration-200
-                        hover:bg-surface-container-high
-                      "
+                    <Button
+                      variant="secondary"
+                      onClick={() => onView(product)}
                     >
                       Ver
-                    </Link>
+                    </Button>
 
                     <Button variant="secondary" onClick={() => onEdit(product)}>
                       Editar
