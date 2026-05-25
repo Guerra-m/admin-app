@@ -13,7 +13,7 @@ type AuthState = {
   setLoading: (value: boolean) => void;
   setError: (msg: string | null) => void;
 
-  clear: () => void;
+  logout: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>()(
       setLoading: (value) => set({ loading: value }),
       setError: (msg) => set({ error: msg }),
 
-      clear: () =>
+      logout: () =>
         set({
           user: null,
           isAuthenticated: false,
