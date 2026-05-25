@@ -57,6 +57,7 @@ const links = [
     icon: "person",
     roles: ["ADMIN", "STOCK", "PEDIDOS", ],
   },
+  
 ];
 
 const linkBase = `

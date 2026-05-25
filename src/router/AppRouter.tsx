@@ -11,6 +11,7 @@ import { IngredientsPage } from '../modules/ingredients/pages/IngredientsPage';
 import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
 import { OrdersPage } from '../modules/orders/pages/OrdersPage';
 import { ProfilePage } from '../modules/profile/pages/ProfilePage';
+import { UsersPage } from '../modules/users/pages/UsersPage';
 export const AppRouter = () => {
 
   return (
@@ -81,8 +82,18 @@ export const AppRouter = () => {
               </RoleRoute>
             }
           />
+          {/* USUARIOS */}
+          <Route
+            path="/usuarios"
+            element={
+              <RoleRoute roles={["ADMIN"]}>
+                <UsersPage/>
+              </RoleRoute>
+            }
+          />
+         
         </Route>
-            
+        
           
       </Route>
 
