@@ -1,35 +1,38 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import { LoginPage } from '../modules/auth/components/LoginPage';
-import { PrivateRoute } from '../modules/auth/components/PrivateRoute';
-import { RoleRoute } from '../modules/auth/components/RoleRoute';
+import { LoginPage } from "../modules/auth/components/LoginPage";
+import { PrivateRoute } from "../modules/auth/components/PrivateRoute";
+import { RoleRoute } from "../modules/auth/components/RoleRoute";
 
-import { MainLayout } from '../shared/layouts/MainLayout';
+import { MainLayout } from "../shared/layouts/MainLayout";
 
-import { ProductsPage } from '../modules/products/pages/ProductsPage';
-import { IngredientsPage } from '../modules/ingredients/pages/IngredientsPage';
-import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
-import { OrdersPage } from '../modules/orders/pages/OrdersPage';
-import { ProfilePage } from '../modules/profile/pages/ProfilePage';
-import { UsersPage } from '../modules/users/pages/UsersPage';
+import { DashboardPage } from "../modules/dashboard/pages/DashboardPage";
+import { ProductsPage } from "../modules/products/pages/ProductsPage";
+import { IngredientsPage } from "../modules/ingredients/pages/IngredientsPage";
+import { CategoriesPage } from "../modules/categories/pages/CategoriesPage";
+import { OrdersPage } from "../modules/orders/pages/OrdersPage";
+import { ProfilePage } from "../modules/profile/pages/ProfilePage";
+import { UsersPage } from "../modules/users/pages/UsersPage";
+
 export const AppRouter = () => {
-
   return (
-
     <Routes>
 
-      <Route
-        path="/login"
-        element={<LoginPage />}
-      />
+      <Route path="/login" element={<LoginPage />} />
 
       <Route element={<PrivateRoute />}>
-
         <Route element={<MainLayout />}>
 
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+          {/* DASHBOARD */}
           <Route
-            path="/"
-            element={<Navigate to="/perfil" replace />}
+            path="/dashboard"
+            element={
+              <RoleRoute roles={["ADMIN"]}>
+                <DashboardPage />
+              </RoleRoute>
+            }
           />
 
           {/* PRODUCTOS */}
@@ -41,8 +44,6 @@ export const AppRouter = () => {
               </RoleRoute>
             }
           />
-
-          
 
           {/* CATEGORIAS */}
           <Route
@@ -64,15 +65,16 @@ export const AppRouter = () => {
             }
           />
 
-          {/* EMPLEADOS */}
+          {/* PEDIDOS */}
           <Route
             path="/pedidos"
             element={
-              <RoleRoute roles={["ADMIN"]}>
+              <RoleRoute roles={["ADMIN", "PEDIDOS"]}>
                 <OrdersPage />
               </RoleRoute>
             }
           />
+
           {/* PERFIL */}
           <Route
             path="/perfil"
@@ -82,22 +84,20 @@ export const AppRouter = () => {
               </RoleRoute>
             }
           />
+
           {/* USUARIOS */}
           <Route
             path="/usuarios"
             element={
               <RoleRoute roles={["ADMIN"]}>
-                <UsersPage/>
+                <UsersPage />
               </RoleRoute>
             }
           />
-         
+
         </Route>
-        
-          
       </Route>
 
     </Routes>
-
   );
 };
