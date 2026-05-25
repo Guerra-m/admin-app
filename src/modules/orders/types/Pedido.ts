@@ -2,7 +2,7 @@ export type EstadoPedido =
   | "PENDIENTE"
   | "CONFIRMADO"
   | "EN_PREP"
-  | "LISTO"
+  | "EN_CAMINO"
   | "ENTREGADO"
   | "CANCELADO";
 

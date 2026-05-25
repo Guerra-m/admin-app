@@ -4,12 +4,13 @@ import type { EstadoPedido } from "../types/Pedido";
 type Props = {
   order: {
     id: number;
-    estado_codigo: EstadoPedido;
+    estado_codigo: string;
     total: number;
   };
+  onRefresh: () => void;
 };
 
-export const OrderCard = ({ order }: Props) => {
+export const OrderCard = ({ order, onRefresh }: Props) => {
 
   const handleAdvance = async () => {
     let nextState: EstadoPedido | null = null;
@@ -24,16 +25,16 @@ export const OrderCard = ({ order }: Props) => {
         break;
 
       case "EN_PREP":
-        nextState = "LISTO";
+        nextState = "EN_CAMINO";
         break;
 
-      case "LISTO":
+      case "EN_CAMINO":
         nextState = "ENTREGADO";
         break;
 
       case "ENTREGADO":
       case "CANCELADO":
-        return; // estados finales → no avanza
+        return;
     }
 
     if (!nextState) return;
@@ -43,7 +44,8 @@ export const OrderCard = ({ order }: Props) => {
         estado_hacia: nextState,
       });
 
-      console.log("Estado actualizado");
+      onRefresh(); // ✅ ahora sí existe
+
     } catch (err) {
       console.error("Error cambiando estado", err);
     }
@@ -62,7 +64,7 @@ export const OrderCard = ({ order }: Props) => {
           order.estado_codigo === "ENTREGADO" ||
           order.estado_codigo === "CANCELADO"
         }
-        className="mt-3 bg-primary text-white px-4 py-2 rounded-lg disabled:opacity-50"
+        className="mt-3 bg-primary text-white px-4 py-2 rounded-lg disabled:opacity-50 cursor-pointer"
       >
         Avanzar estado
       </button>
