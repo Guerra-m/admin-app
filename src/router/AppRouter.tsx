@@ -12,6 +12,7 @@ import { CategoriesPage } from '../modules/categories/pages/CategoriesPage';
 import { OrdersPage } from '../modules/orders/pages/OrdersPage';
 import { ProfilePage } from '../modules/profile/pages/ProfilePage';
 import { UsersPage } from '../modules/users/pages/UsersPage';
+import { DashBoardPage } from '../modules/dashboard/pages/DashBoardPage';
 export const AppRouter = () => {
 
   return (
@@ -31,7 +32,15 @@ export const AppRouter = () => {
             path="/"
             element={<Navigate to="/perfil" replace />}
           />
-
+          {/* PRODUCTOS */}
+          <Route
+            path="/dashboard"
+            element={
+              <RoleRoute roles={["ADMIN"]}>
+                <DashBoardPage/>
+              </RoleRoute>
+            }
+          />
           {/* PRODUCTOS */}
           <Route
             path="/productos"
