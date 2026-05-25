@@ -1,73 +1,78 @@
-import { avanzarEstadoPedido } from "../../../shared/api/pedido.api";
-import type { EstadoPedido } from "../types/Pedido";
+import type { PedidoRead, EstadoPedidoCodigo } from "../types/Order";
+import { FSM_TRANSITIONS, ESTADO_LABELS } from "../types/Order";
 
 type Props = {
-  order: {
-    id: number;
-    estado_codigo: string;
-    total: number;
-  };
-  onRefresh: () => void;
+  order: PedidoRead;
+  onAvanzar: (
+    pedidoId: number,
+    estado_hacia: EstadoPedidoCodigo,
+    motivo?: string
+  ) => void;
+  isLoading?: boolean;
 };
 
-export const OrderCard = ({ order, onRefresh }: Props) => {
-
-  const handleAdvance = async () => {
-    let nextState: EstadoPedido | null = null;
-
-    switch (order.estado_codigo) {
-      case "PENDIENTE":
-        nextState = "CONFIRMADO";
-        break;
-
-      case "CONFIRMADO":
-        nextState = "EN_PREP";
-        break;
-
-      case "EN_PREP":
-        nextState = "EN_CAMINO";
-        break;
-
-      case "EN_CAMINO":
-        nextState = "ENTREGADO";
-        break;
-
-      case "ENTREGADO":
-      case "CANCELADO":
-        return;
-    }
-
-    if (!nextState) return;
-
-    try {
-      await avanzarEstadoPedido(order.id, {
-        estado_hacia: nextState,
-      });
-
-      onRefresh(); // ✅ ahora sí existe
-
-    } catch (err) {
-      console.error("Error cambiando estado", err);
-    }
-  };
+export const OrderCard = ({ order, onAvanzar, isLoading }: Props) => {
+  const estado = order.estado_codigo as EstadoPedidoCodigo;
+  const transiciones = FSM_TRANSITIONS[estado] ?? [];
+  const nextStates = transiciones.filter((s) => s !== "CANCELADO");
+  const canCancel = transiciones.includes("CANCELADO");
 
   return (
-    <div className="p-4 rounded-xl bg-surface-container shadow-warm">
-      <h3 className="font-bold">Pedido #{order.id}</h3>
+    <article className="rounded-lg bg-surface border border-outline-variant p-4 shadow-warm space-y-3">
+      
+      <div className="flex items-center justify-between">
+        <h3 className="font-bold text-on-surface font-admin text-sm">
+          Pedido #{order.id}
+        </h3>
+        <span className="text-sm font-bold text-primary">
+          ${order.total.toFixed(2)}
+        </span>
+      </div>
 
-      <p>Estado: {order.estado_codigo}</p>
-      <p>Total: ${order.total}</p>
+      <div className="text-xs text-on-surface-variant space-y-0.5">
+        <p>Pago: {order.forma_pago_codigo}</p>
+        <p>{new Date(order.created_at).toLocaleDateString("es-AR")}</p>
+        {order.notas && <p className="italic">"{order.notas}"</p>}
+      </div>
 
-      <button
-        onClick={handleAdvance}
-        disabled={
-          order.estado_codigo === "ENTREGADO" ||
-          order.estado_codigo === "CANCELADO"
-        }
-        className="mt-3 bg-primary text-white px-4 py-2 rounded-lg disabled:opacity-50 cursor-pointer"
-      >
-        Avanzar estado
-      </button>
-    </div>
+      <div className="flex flex-col gap-1.5 pt-1">
+        {nextStates.map((hacia) => (
+          <button
+            key={hacia}
+            onClick={() => onAvanzar(order.id, hacia)}
+            disabled={isLoading}
+            className="
+              rounded-md bg-primary text-on-primary
+              text-xs px-3 py-1.5 font-semibold
+              hover:opacity-90 disabled:opacity-50
+              transition-all active:scale-95
+            "
+          >
+            → {ESTADO_LABELS[hacia]}
+          </button>
+        ))}
+
+        {canCancel && (
+          <button
+            onClick={() => {
+              const motivo = window.prompt("Motivo de cancelación (obligatorio):");
+              if (motivo?.trim()) {
+                onAvanzar(order.id, "CANCELADO", motivo.trim());
+              }
+            }}
+            disabled={isLoading}
+            className="
+              rounded-md bg-error/10 text-error
+              border border-error/30
+              text-xs px-3 py-1.5 font-semibold
+              hover:bg-error hover:text-white
+              disabled:opacity-50 transition-all active:scale-95
+            "
+          >
+            Cancelar pedido
+          </button>
+        )}
+      </div>
+    </article>
   );
 };
