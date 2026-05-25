@@ -1,64 +1,107 @@
 import { useMemo, useState } from "react";
 
 import { UsersTable } from "../components/UsersTable";
+import { UserRolesModal } from "../components/UserRolesModal";
 
 import { useUsers } from "../hooks/useUsers";
-
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
+
+import type { UsuarioReadWithRoles } from "../types/UserManagement";
 
 export const UsersPage = () => {
   const {
     users,
     roles,
-
     isLoading,
     isError,
     error,
-
     assignRoleMutation,
     revokeRoleMutation,
   } = useUsers();
 
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
   // ─────────────────────────────
-  // FILTER USERS
+  // MODAL STATE
+  // ─────────────────────────────
+  const [selectedUser, setSelectedUser] =
+    useState<UsuarioReadWithRoles | null>(null);
+
+  const [selectedRoles, setSelectedRoles] =
+    useState<string[]>([]);
+
+  const [rolesModalOpen, setRolesModalOpen] =
+    useState(false);
+
+  // ─────────────────────────────
+  // FILTER
   // ─────────────────────────────
   const filteredUsers = useMemo(() => {
-    const value =
-      search.trim().toLowerCase();
-
+    const value = search.trim().toLowerCase();
     if (!value) return users;
 
     return users.filter((user) =>
-      user.email
-        .toLowerCase()
-        .includes(value),
+      user.email.toLowerCase().includes(value)
     );
   }, [users, search]);
 
   // ─────────────────────────────
-  // ACTIONS
+  // OPEN MODAL
   // ─────────────────────────────
-  const handleAssignRole = (
-    usuarioId: number,
-    rolCodigo: string,
-  ) => {
-    assignRoleMutation.mutate({
-      usuario_id: usuarioId,
-      rol_codigo: rolCodigo,
-    });
+  const handleOpenRoles = (user: UsuarioReadWithRoles) => {
+    setSelectedUser(user);
+    setSelectedRoles(user.roles);
+    setRolesModalOpen(true);
   };
 
-  const handleRevokeRole = (
-    usuarioId: number,
-    rolCodigo: string,
-  ) => {
-    revokeRoleMutation.mutate({
-      usuario_id: usuarioId,
-      rol_codigo: rolCodigo,
-    });
+  // ─────────────────────────────
+  // TOGGLE ROLE (CHECKBOX)
+  // ─────────────────────────────
+  const handleToggleRole = (role: string) => {
+    setSelectedRoles((prev) =>
+      prev.includes(role)
+        ? prev.filter((r) => r !== role)
+        : [...prev, role]
+    );
+  };
+
+  // ─────────────────────────────
+  // SAVE ROLES
+  // ─────────────────────────────
+  const handleSaveRoles = async () => {
+    if (!selectedUser) return;
+
+    const currentRoles = selectedUser.roles;
+
+    const toAdd = selectedRoles.filter(
+      (r) => !currentRoles.includes(r)
+    );
+
+    const toRemove = currentRoles.filter(
+      (r) => !selectedRoles.includes(r)
+    );
+
+    try {
+      await Promise.all([
+        ...toAdd.map((role) =>
+          assignRoleMutation.mutateAsync({
+            usuario_id: selectedUser.id,
+            rol_codigo: role,
+          })
+        ),
+
+        ...toRemove.map((role) =>
+          revokeRoleMutation.mutateAsync({
+            usuario_id: selectedUser.id,
+            rol_codigo: role,
+          })
+        ),
+      ]);
+
+      setRolesModalOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -66,86 +109,31 @@ export const UsersPage = () => {
 
       {/* HEADER */}
       <div>
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-primary
-            font-store
-          "
-        >
+        <h1 className="text-3xl font-bold text-primary font-store">
           Usuarios
         </h1>
 
-        <p
-          className="
-            mt-1
-            text-sm
-            text-on-surface-variant
-            font-admin
-          "
-        >
+        <p className="mt-1 text-sm text-on-surface-variant font-admin">
           Gestión de usuarios y roles
         </p>
       </div>
 
       {/* SEARCH */}
-      <div>
-        <input
-          type="text"
-          placeholder="Buscar por email..."
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-          className="
-            w-full
-            rounded-lg
-            border
-            border-outline-variant
-            bg-surface-container-lowest
-            px-4
-            py-3
-            text-on-surface
-            outline-none
-            transition-all
-
-            focus:border-primary
-          "
-        />
-      </div>
+      <input
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Buscar por email..."
+        className="w-full rounded-lg border px-4 py-3"
+      />
 
       {/* LOADING */}
-      {isLoading && (
-        <div
-          className="
-            rounded-lg
-            bg-surface-container
-            p-6
-            text-on-surface-variant
-            shadow-warm
-          "
-        >
-          Cargando usuarios...
-        </div>
-      )}
+      {isLoading && <p>Cargando...</p>}
 
       {/* ERROR */}
       {isError && (
-        <div
-          className="
-            rounded-lg
-            border
-            border-error
-            bg-error/10
-            p-4
-            text-error
-          "
-        >
-          Error:
-          {" "}
+        <p className="text-error">
           {getApiErrorMessage(error)}
-        </div>
+        </p>
       )}
 
       {/* TABLE */}
@@ -153,15 +141,20 @@ export const UsersPage = () => {
         <UsersTable
           users={filteredUsers}
           roles={roles}
-          onAssignRole={
-            handleAssignRole
-          }
-          onRevokeRole={
-            handleRevokeRole
-          }
+          onOpenRoles={handleOpenRoles}
         />
       )}
 
+      {/* MODAL */}
+      <UserRolesModal
+        open={rolesModalOpen}
+        user={selectedUser}
+        roles={roles}
+        selectedRoles={selectedRoles}
+        onToggleRole={handleToggleRole}
+        onClose={() => setRolesModalOpen(false)}
+        onSave={handleSaveRoles}
+      />
     </section>
   );
 };
