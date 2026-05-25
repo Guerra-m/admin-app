@@ -1,15 +1,9 @@
 import { userApi } from "../../../shared/api/user.api";
 import { useAuthStore } from "../store/authStore";
-import type { LoginCredentials, RegisterRequest } from "../types";
+import type { LoginCredentials, RegisterRequest, UsuarioReadWithRoles } from "../types/User";
 
 export const useAuth = () => {
-  const {
-    setUser,
-    setAuth,
-    setLoading,
-    setError,
-    clear,
-  } = useAuthStore();
+  const { setUser, setAuth, setLoading, setError, clear } = useAuthStore();
 
   const login = async (credentials: LoginCredentials) => {
     setLoading(true);
@@ -17,7 +11,8 @@ export const useAuth = () => {
 
     try {
       await userApi.login(credentials.email, credentials.password);
-      const user = await userApi.me();
+
+      const user = await userApi.me() as UsuarioReadWithRoles;
 
       setUser(user);
       setAuth(true);
@@ -46,11 +41,13 @@ export const useAuth = () => {
     }
   };
 
-  const logout = useAuthStore((s) => s.logout);
+  const logout = () => {
+  clear();
+};
 
   const getMe = async () => {
     try {
-      const user = await userApi.me();
+      const user = await userApi.me() as UsuarioReadWithRoles;
       setUser(user);
       setAuth(true);
     } catch {

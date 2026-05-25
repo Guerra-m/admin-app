@@ -1,4 +1,3 @@
-// Usuario Create
 export interface UsuarioCreate {
   nombre: string;
   apellido: string;
@@ -7,30 +6,26 @@ export interface UsuarioCreate {
   password: string;
 }
 
-// Usuario Update (parcial)
 export interface UsuarioUpdate {
   nombre?: string | null;
   apellido?: string | null;
   celular?: string | null;
 }
 
-// Usuario Read (respuesta del backend)
 export interface UsuarioRead {
   id: number;
   nombre: string;
   apellido: string;
   email: string;
   celular?: string | null;
-  created_at: string; // datetime -> string en frontend
-  updated_at: string; // datetime -> string en frontend
+  created_at: string;
+  updated_at: string;
 }
 
-// Usuario con roles
 export interface UsuarioReadWithRoles extends UsuarioRead {
   roles: string[];
 }
 
-// Usuario autenticado (interno frontend)
 export interface UsuarioAuth {
   id: number;
   nombre: string;
@@ -40,14 +35,31 @@ export interface UsuarioAuth {
   roles: string[];
 }
 
-// Token
 export interface Token {
   access_token: string;
-  token_type: string; // normalmente "bearer"
+  token_type: string;
   expires_in: number;
 }
 
-// Refresh token request
 export interface TokenRefreshRequest {
   refresh_token: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  nombre: string;
+  apellido: string;
+  email: string;
+  celular?: string | null;
+  password: string;
+}
+
+export interface LoginResponse {
+  mensaje: string;
+  refresh_token: string;
+  expires_in: number;
 }

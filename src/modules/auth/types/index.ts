@@ -1,3 +1,6 @@
+export * from "./User";
+export * from "./UserRole";
+
 export interface User {
   id: number;
   email: string;
