@@ -13,12 +13,15 @@ import { OrdersPage } from "../modules/orders/pages/OrdersPage";
 import { ProfilePage } from "../modules/profile/pages/ProfilePage";
 import { UsersPage } from "../modules/users/pages/UsersPage";
 import { DashboardPage } from "../modules/dashboard/pages/DashBoardPage";
+import { RegisterPage } from "../modules/auth/components/RegisterPage";
 
 export const AppRouter = () => {
   return (
     <Routes>
 
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
 
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
