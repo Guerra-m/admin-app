@@ -1,30 +1,18 @@
-import { useEffect, useState } from "react";
 import { OrdersBoard } from "../components/OrdersBoard";
-import { getPedidos } from "../../../shared/api/pedido.api";
-import type { PedidoRead } from "../types/Pedido";
 
 export const OrdersPage = () => {
-  const [orders, setOrders] = useState<PedidoRead[]>([]);
-
-  const loadOrders = async () => {
-    const data = await getPedidos();
-    setOrders(data);
-  };
-
-  useEffect(() => {
-    loadOrders();
-  }, []);
-
   return (
-    <section className="p-4">
-      <h1 className="text-3xl font-bold mb-6">
-        Panel de Pedidos
-      </h1>
+    <section className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-primary font-store">
+          Panel de Pedidos
+        </h1>
+        <p className="text-sm text-on-surface-variant font-admin mt-1">
+          Gestión y seguimiento de pedidos en tiempo real
+        </p>
+      </div>
 
-      <OrdersBoard
-        orders={orders}
-        onRefresh={loadOrders}
-      />
+      <OrdersBoard />
     </section>
   );
 };
