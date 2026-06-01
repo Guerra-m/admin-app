@@ -165,7 +165,7 @@ export const ProductsTable = ({
                   {product.ingredientes?.length
                     ? product.ingredientes.map((i) => i.nombre).join(", ")
                     : "-"}
-                </td>
+                </td> 
 
                 {/* ACTIONS */}
                 <td className="p-4">

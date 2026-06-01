@@ -26,17 +26,9 @@ export const AppRouter = () => {
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/perfil" replace />} />
 
-          {/* DASHBOARD */}
-          <Route
-            path="/dashboard"
-            element={
-              <RoleRoute roles={["ADMIN"]}>
-                <DashboardPage />
-              </RoleRoute>
-            }
-          />
+          
 
           {/* PRODUCTOS */}
           <Route
@@ -94,6 +86,15 @@ export const AppRouter = () => {
             element={
               <RoleRoute roles={["ADMIN"]}>
                 <UsersPage />
+              </RoleRoute>
+            }
+          />
+          {/* DASHBOARD */}
+          <Route
+            path="/dashboard"
+            element={
+              <RoleRoute roles={["ADMIN"]}>
+                <DashboardPage />
               </RoleRoute>
             }
           />
