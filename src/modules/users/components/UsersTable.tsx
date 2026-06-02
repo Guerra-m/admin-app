@@ -10,11 +10,13 @@ type Props = {
   roles: RolRead[];
 
   onOpenRoles: (user: UsuarioReadWithRoles) => void;
+  onDeleteUser: (user: UsuarioReadWithRoles) => void;
 };
 
 export const UsersTable = ({
   users,
   onOpenRoles,
+  onDeleteUser
 }: Props) => {
   return (
     <div
@@ -55,10 +57,9 @@ export const UsersTable = ({
                 border-b border-outline-variant/40
                 transition-colors duration-200
                 hover:bg-surface-container-low
-                ${
-                  index % 2 === 0
-                    ? "bg-surface-container-lowest"
-                    : "bg-surface"
+                ${index % 2 === 0
+                  ? "bg-surface-container-lowest"
+                  : "bg-surface"
                 }
               `}
             >
@@ -106,12 +107,21 @@ export const UsersTable = ({
 
               {/* ACTIONS */}
               <td className="p-4">
-                <Button
-                  variant="secondary"
-                  onClick={() => onOpenRoles(user)}
-                >
-                  Roles
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="secondary"
+                    onClick={() => onOpenRoles(user)}
+                  >
+                    Roles
+                  </Button>
+
+                  <Button
+                    variant="danger"
+                    onClick={() => onDeleteUser(user)}
+                  >
+                    Eliminar
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}
