@@ -67,18 +67,6 @@ export const LoginPage = () => {
           >
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              ¿No tenés cuenta?
-            </p>
-
-            <Link
-              to="/register"
-              className="text-blue-600 hover:underline font-semibold"
-            >
-              Crear cuenta
-            </Link>
-          </div>
         </form>
 
         {error && (

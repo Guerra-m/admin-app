@@ -9,6 +9,7 @@ import {
   getRoles,
   assignRole,
   revokeRole,
+  deleteUser,
 } from "../../../shared/api/userManagement.api";
 
 import type {
@@ -88,6 +89,20 @@ export const useUsers = () => {
     },
   });
 
+  // ─────────────────────────────
+  // DELETE USER
+  // ─────────────────────────────
+  const deleteUserMutation = useMutation({
+    mutationFn: (usuarioId: number) =>
+      deleteUser(usuarioId),
+
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: USERS_QUERY_KEY,
+      });
+    },
+  });
+
   return {
     users: usersQuery.data ?? [],
     roles: rolesQuery.data ?? [],
@@ -106,5 +121,6 @@ export const useUsers = () => {
 
     assignRoleMutation,
     revokeRoleMutation,
+    deleteUserMutation,
   };
 };

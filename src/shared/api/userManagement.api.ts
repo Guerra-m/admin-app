@@ -72,4 +72,21 @@ export const revokeRole = async (
   );
 
   return res.data;
+
+  
+};
+// ─────────────────────────────
+// DELETE USER
+// ─────────────────────────────
+export const deleteUser = async (
+  usuarioId: number,
+) => {
+  const res = await http.delete(
+    `/api/v1/auth/admin/usuarios/${usuarioId}`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return res.data;
 };
