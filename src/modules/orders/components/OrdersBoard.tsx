@@ -1,5 +1,6 @@
 import { OrderColumn } from "./OrderColumn";
 import { useOrders } from "../hooks/useOrders";
+import { useWebSocket } from "../hooks/useWebSocket";
 import type { EstadoPedidoCodigo } from "../types/Order";
 import { ESTADO_LABELS } from "../types/Order";
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
@@ -13,6 +14,8 @@ const BOARD_COLUMNS: EstadoPedidoCodigo[] = [
 ];
 
 export const OrdersBoard = () => {
+  useWebSocket();
+
   const {
     data: orders = [],
     isLoading,
