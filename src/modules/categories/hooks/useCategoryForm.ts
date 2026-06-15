@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { useCategories } from "./useCategories";
-
+import { uploadImage } from "../../../shared/lib/cloudinary";
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
 
 import type { CategoriaRead } from "../types/Categories";
@@ -47,6 +47,20 @@ export const useCategoryForm = () => {
     useState<CategoryFormState>(emptyForm);
 
   const [formError, setFormError] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const handleImageChange = async (file: File) => {
+    setUploadingImage(true);
+    setFormError("");
+    try {
+      const url = await uploadImage(file, "categorias");
+      setForm((prev) => ({ ...prev, imagen_url: url }));
+    } catch {
+      setFormError("No se pudo subir la imagen. Intentá de nuevo.");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   const startCreate = () => {
     setEditing(null);
@@ -137,6 +151,9 @@ export const useCategoryForm = () => {
 
     onSubmit,
     onDelete,
+
+    handleImageChange,
+    uploadingImage,
 
     isSubmitting:
       createCategory.isPending ||

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
 
@@ -16,11 +17,11 @@ type Props = {
   form: CategoryFormState;
   formError: string;
   isSubmitting: boolean;
+  uploadingImage: boolean;
   onClose: () => void;
   onChange: (next: CategoryFormState) => void;
-  onSubmit: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onImageChange: (file: File) => void;
 };
 
 export const CategoryFormModal = ({
@@ -29,10 +30,13 @@ export const CategoryFormModal = ({
   form,
   formError,
   isSubmitting,
+  uploadingImage,
   onClose,
   onChange,
   onSubmit,
+  onImageChange,
 }: Props) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
 
@@ -159,51 +163,42 @@ export const CategoryFormModal = ({
         {/* IMAGEN */}
         <div className="space-y-2">
 
-          <label
-            className="
-              text-sm
-              font-semibold
-              text-on-surface
-            "
-          >
-            URL de imagen
+          <label className="text-sm font-semibold text-on-surface">
+            Imagen de la categoría
           </label>
 
+          {form.imagen_url && (
+            <img
+              src={form.imagen_url}
+              alt="preview"
+              referrerPolicy="no-referrer"
+              className="h-32 w-32 rounded-lg object-cover border border-outline-variant"
+            />
+          )}
+
           <input
-            value={form.imagen_url}
-            onChange={(event) =>
-              onChange({
-                ...form,
-                imagen_url: event.target.value,
-              })
-            }
-            className="
-              w-full
-
-              rounded-lg
-
-              border
-              border-outline
-
-              bg-surface-container-low
-
-              px-4
-              py-3
-
-              text-on-surface
-              placeholder:text-on-surface-variant
-
-              outline-none
-
-              transition-all
-              duration-200
-
-              focus:border-primary
-              focus:ring-2
-              focus:ring-primary/20
-            "
-            placeholder="https://..."
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onImageChange(file);
+            }}
           />
+
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingImage}
+          >
+            {uploadingImage
+              ? "Subiendo..."
+              : form.imagen_url
+              ? "Cambiar imagen"
+              : "Subir imagen"}
+          </Button>
 
         </div>
 

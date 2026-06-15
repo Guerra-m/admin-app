@@ -34,6 +34,9 @@ export const CategoriesPage = () => {
     onSubmit,
     onDelete,
 
+    handleImageChange,
+    uploadingImage,
+
     isSubmitting,
   } = useCategoryForm();
 
@@ -181,9 +184,11 @@ export const CategoriesPage = () => {
         form={form}
         formError={formError}
         isSubmitting={isSubmitting}
+        uploadingImage={uploadingImage}
         onClose={() => setOpen(false)}
         onChange={setForm}
         onSubmit={onSubmit}
+        onImageChange={handleImageChange}
       />
 
     </section>

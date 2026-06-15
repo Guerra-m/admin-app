@@ -94,7 +94,7 @@ export const useProductForm = () => {
     setUploadingImage(true);
     setFormError("");
     try {
-      const url = await uploadImage(file);
+      const url = await uploadImage(file, "productos");
       setForm((prev) => ({ ...prev, imagenes_url: url }));
     } catch {
       setFormError("No se pudo subir la imagen. Intentá de nuevo.");
