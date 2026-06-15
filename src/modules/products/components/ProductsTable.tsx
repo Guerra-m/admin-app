@@ -14,13 +14,6 @@ type Props = {
   onDelete: (id: number) => void;
 };
 
-// 🔥 SAFE PARSER
-const getImages = (value?: string) =>
-  (value ?? "")
-    .split(",")
-    .map((i) => i.trim())
-    .filter(Boolean);
-
 export const ProductsTable = ({
   products,
   onView,
@@ -58,8 +51,9 @@ export const ProductsTable = ({
         <tbody>
           {products.map((product, index) => {
             console.log(product);
-            const images = getImages(product.imagenes_url);
-            const coverImage = images[0];
+            const coverImage = Array.isArray(product.imagenes_url) && product.imagenes_url.length > 0
+              ? product.imagenes_url[0]
+              : undefined;
 
             return (
               <tr
