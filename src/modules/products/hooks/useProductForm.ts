@@ -45,7 +45,7 @@ const toForm = (
   descripcion: product.descripcion ?? "",
   precio_base: String(product.precio_base),
 
-  imagenes_url: product.imagenes_url ?? "",
+  imagenes_url: Array.isArray(product.imagenes_url) ? (product.imagenes_url[0] ?? "") : "",
 
   stock_cantidad: String(product.stock_cantidad),
   disponible: product.disponible,
@@ -188,8 +188,7 @@ export const useProductForm = () => {
       descripcion: form.descripcion.trim() || undefined,
       precio_base: precio,
 
-      // 
-      imagenes_url: form.imagenes_url.trim() || "",
+      imagenes_url: form.imagenes_url.trim() ? [form.imagenes_url.trim()] : undefined,
 
       stock_cantidad: stock,
       disponible: form.disponible,

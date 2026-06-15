@@ -1,3 +1,4 @@
+import { useDroppable } from "@dnd-kit/core";
 import { OrderCard } from "./OrderCard";
 import type { PedidoRead, EstadoPedidoCodigo } from "../types/Order";
 
@@ -13,9 +14,11 @@ type Props = {
   isLoading?: boolean;
 };
 
-export const OrderColumn = ({ title, orders, onAvanzar, isLoading }: Props) => {
+export const OrderColumn = ({ status, title, orders, onAvanzar, isLoading }: Props) => {
+  const { setNodeRef, isOver } = useDroppable({ id: status });
+
   return (
-    <div className="rounded-xl bg-surface-container p-3 min-h-[500px] flex flex-col">
+    <div className="rounded-xl bg-surface-container p-3 min-h-125 flex flex-col">
 
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xs font-bold text-on-surface font-admin uppercase tracking-wider">
@@ -26,10 +29,20 @@ export const OrderColumn = ({ title, orders, onAvanzar, isLoading }: Props) => {
         </span>
       </div>
 
-      <div className="space-y-3 flex-1">
+      <div
+        ref={setNodeRef}
+        className={`
+          space-y-3 flex-1 rounded-lg p-1 transition-colors duration-150
+          ${isOver ? "bg-primary/5 ring-2 ring-primary/30 ring-inset" : ""}
+        `}
+      >
         {orders.length === 0 ? (
-          <div className="text-center text-xs text-on-surface-variant py-10 border-2 border-dashed border-outline-variant rounded-lg">
-            Sin pedidos
+          <div className={`
+            text-center text-xs text-on-surface-variant py-10
+            border-2 border-dashed rounded-lg transition-colors duration-150
+            ${isOver ? "border-primary/50 text-primary" : "border-outline-variant"}
+          `}>
+            {isOver ? "Soltar aquí" : "Sin pedidos"}
           </div>
         ) : (
           orders.map((order) => (
