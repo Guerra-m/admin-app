@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
 
@@ -24,6 +25,7 @@ type Props = {
   ingredients: IngredienteRead[];
   formError: string;
   isSubmitting: boolean;
+  uploadingImage: boolean;
   toggleId: (
     ids: number[],
     id: number
@@ -35,6 +37,7 @@ type Props = {
   onSubmit: (
     event: React.FormEvent<HTMLFormElement>
   ) => void;
+  onImageChange: (file: File) => void;
 };
 
 const inputStyles = `
@@ -71,11 +74,15 @@ export const ProductFormModal = ({
   ingredients,
   formError,
   isSubmitting,
+  uploadingImage,
   toggleId,
   onClose,
   onChange,
   onSubmit,
+  onImageChange,
 }: Props) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <Modal
       open={open}
@@ -222,31 +229,47 @@ export const ProductFormModal = ({
 
         </div>
 
-        {/* IMÁGENES */}
+        {/* IMAGEN */}
         <div className="space-y-2">
 
-          <label
-            className="
-              text-sm
-              font-semibold
-              text-on-surface
-              font-admin
-            "
-          >
-            URLs de imágenes
+          <label className="text-sm font-semibold text-on-surface font-admin">
+            Imagen del producto
           </label>
 
+          {/* Preview */}
+          {form.imagenes_url && (
+            <img
+              src={form.imagenes_url}
+              alt="preview"
+              referrerPolicy="no-referrer"
+              className="h-32 w-32 rounded-lg object-cover border border-outline-variant"
+            />
+          )}
+
+          {/* File input oculto */}
           <input
-            value={form.imagenes_url}
-            onChange={(event) =>
-              onChange({
-                ...form,
-                imagenes_url: event.target.value,
-              })
-            }
-            className={inputStyles}
-            placeholder="https://..."
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) onImageChange(file);
+            }}
           />
+
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingImage}
+          >
+            {uploadingImage
+              ? "Subiendo..."
+              : form.imagenes_url
+              ? "Cambiar imagen"
+              : "Subir imagen"}
+          </Button>
 
         </div>
 

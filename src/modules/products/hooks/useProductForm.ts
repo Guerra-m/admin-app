@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { uploadImage } from "../../../shared/lib/cloudinary";
+import { updateProductImages } from "../../../shared/api/producto.api";
 
 import {
   addProductToCategory,
@@ -73,6 +75,7 @@ export const useProductForm = () => {
 
   const [form, setForm] = useState<ProductFormState>(emptyForm);
   const [formError, setFormError] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [viewing, setViewing] =
     useState<ProductoRead | null>(null);
@@ -85,6 +88,19 @@ export const useProductForm = () => {
     setForm(emptyForm);
     setFormError("");
     setOpen(true);
+  };
+
+  const handleImageChange = async (file: File) => {
+    setUploadingImage(true);
+    setFormError("");
+    try {
+      const url = await uploadImage(file);
+      setForm((prev) => ({ ...prev, imagenes_url: url }));
+    } catch {
+      setFormError("No se pudo subir la imagen. Intentá de nuevo.");
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const startEdit = (product: ProductoRead) => {
@@ -183,16 +199,13 @@ export const useProductForm = () => {
       return;
     }
 
+    // imagenes_url se guarda por separado via PATCH /imagenes
     const payload: ProductoCreate = {
       nombre: form.nombre.trim(),
       descripcion: form.descripcion.trim() || undefined,
       precio_base: precio,
-
-      imagenes_url: form.imagenes_url.trim() ? [form.imagenes_url.trim()] : undefined,
-
       stock_cantidad: stock,
       disponible: form.disponible,
-
       categorias_ids: form.categoriaIds,
       ingredientes_ids: form.ingredienteIds,
     };
@@ -211,6 +224,11 @@ export const useProductForm = () => {
       }
 
       if (!productId) throw new Error("Sin ID de producto");
+
+      // Guardar imagen por separado si hay URL
+      if (form.imagenes_url.trim()) {
+        await updateProductImages(productId, [form.imagenes_url.trim()]);
+      }
 
       await syncRelations(
         productId,
@@ -258,6 +276,8 @@ export const useProductForm = () => {
     setDetailOpen,
 
     startView,
+    handleImageChange,
+    uploadingImage,
     isSubmitting:
       createProduct.isPending || updateProduct.isPending,
   };

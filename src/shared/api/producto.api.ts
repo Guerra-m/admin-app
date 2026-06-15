@@ -66,6 +66,17 @@ export const updateProduct = async (
 };
 
 /**
+ * PATCH /api/v1/productos/{id}/imagenes
+ */
+export const updateProductImages = async (
+  id: number,
+  imagenes_url: string[]
+): Promise<ProductoRead> => {
+  const res = await http.patch(`${BASE}/${id}/imagenes`, { imagenes_url });
+  return res.data;
+};
+
+/**
  * DELETE /api/v1/productos/{id}
  */
 export const deleteProduct = async (id: number): Promise<void> => {

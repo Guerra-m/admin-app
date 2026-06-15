@@ -18,11 +18,6 @@ CLIENT: juan@example.com / Juan1234!
 ## Probar JSON SERVER
 npm install -g json-server
 
-## Endpoints
-http://localhost:3001/users
-http://localhost:3001/categories
-http://localhost:3001/ingredients
-http://localhost:3001/products
-http://localhost:3001/cart
-http://localhost:3001/orders
+
 video: https://www.youtube.com/watch?v=2V3IXbaUrUI
+

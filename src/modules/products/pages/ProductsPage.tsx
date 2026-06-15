@@ -50,6 +50,8 @@ export const ProductsPage = () => {
 
     toggleId,
 
+    handleImageChange,
+    uploadingImage,
     isSubmitting,
   } = useProductForm();
 
@@ -185,10 +187,12 @@ export const ProductsPage = () => {
         ingredients={ingredients}
         formError={formError}
         isSubmitting={isSubmitting}
+        uploadingImage={uploadingImage}
         toggleId={toggleId}
         onClose={() => setOpen(false)}
         onChange={setForm}
         onSubmit={onSubmit}
+        onImageChange={handleImageChange}
       />
       
       <ProductDetailModal
