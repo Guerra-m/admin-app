@@ -1,3 +1,5 @@
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 import type { PedidoRead, EstadoPedidoCodigo } from "../types/Order";
 import { FSM_TRANSITIONS, ESTADO_LABELS } from "../types/Order";
 
@@ -17,9 +19,26 @@ export const OrderCard = ({ order, onAvanzar, isLoading }: Props) => {
   const nextStates = transiciones.filter((s) => s !== "CANCELADO");
   const canCancel = transiciones.includes("CANCELADO");
 
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id: order.id });
+
+  const style = transform
+    ? { transform: CSS.Translate.toString(transform) }
+    : undefined;
+
   return (
-    <article className="rounded-lg bg-surface border border-outline-variant p-4 shadow-warm space-y-3">
-      
+    <article
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className={`
+        rounded-lg bg-surface border border-outline-variant p-4 shadow-warm space-y-3
+        cursor-grab active:cursor-grabbing select-none
+        transition-shadow
+        ${isDragging ? "opacity-50 shadow-2xl rotate-1 z-50 relative" : ""}
+      `}
+    >
       <div className="flex items-center justify-between">
         <h3 className="font-bold text-on-surface font-admin text-sm">
           Pedido #{order.id}
