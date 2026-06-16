@@ -9,6 +9,7 @@ import {
 import { OrderColumn } from "./OrderColumn";
 import { useOrders } from "../hooks/useOrders";
 import { useWebSocket } from "../hooks/useWebSocket";
+import { useAuthStore } from "../../auth/store/authStore";
 import type { EstadoPedidoCodigo } from "../types/Order";
 import { ESTADO_LABELS, FSM_TRANSITIONS } from "../types/Order";
 import { getApiErrorMessage } from "../../../shared/lib/apiError";
@@ -17,12 +18,18 @@ const BOARD_COLUMNS: EstadoPedidoCodigo[] = [
   "PENDIENTE",
   "CONFIRMADO",
   "EN_PREP",
-  "EN_CAMINO",
   "ENTREGADO",
+  "CANCELADO",
 ];
 
 export const OrdersBoard = () => {
   useWebSocket();
+
+  const user = useAuthStore((s) => s.user);
+  const isPedidosOnly =
+    !!user &&
+    user.roles.includes("PEDIDOS") &&
+    !user.roles.includes("ADMIN");
 
   const {
     data: orders = [],
@@ -96,6 +103,7 @@ export const OrdersBoard = () => {
             orders={orders.filter((o) => o.estado_codigo === status)}
             onAvanzar={handleAvanzar}
             isLoading={avanzarMutation.isPending}
+            censored={isPedidosOnly && status === "PENDIENTE"}
           />
         ))}
       </div>

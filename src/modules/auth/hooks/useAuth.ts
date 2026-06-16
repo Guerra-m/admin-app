@@ -2,6 +2,8 @@ import { userApi } from "../../../shared/api/user.api";
 import { useAuthStore } from "../store/authStore";
 import type { LoginCredentials, RegisterRequest, UsuarioReadWithRoles } from "../types/User";
 
+const ADMIN_ROLES = ["ADMIN", "PEDIDOS", "STOCK"];
+
 export const useAuth = () => {
   const { setUser, setAuth, setLoading, setError,  } = useAuthStore();
 
@@ -13,6 +15,13 @@ export const useAuth = () => {
       await userApi.login(credentials.email, credentials.password);
 
       const user = await userApi.me() as UsuarioReadWithRoles;
+
+      const hasAccess = user.roles.some((r) => ADMIN_ROLES.includes(r));
+      if (!hasAccess) {
+        await userApi.logout();
+        setError("No tenés acceso al panel de administración.");
+        return false;
+      }
 
       setUser(user);
       setAuth(true);

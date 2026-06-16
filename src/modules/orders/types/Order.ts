@@ -50,7 +50,7 @@ export type EstadoPedidoCodigo =
 export const FSM_TRANSITIONS: Record<EstadoPedidoCodigo, EstadoPedidoCodigo[]> = {
   PENDIENTE:  ["CONFIRMADO", "CANCELADO"],
   CONFIRMADO: ["EN_PREP",    "CANCELADO"],
-  EN_PREP:    ["EN_CAMINO",  "CANCELADO"],
+  EN_PREP:    ["ENTREGADO",  "CANCELADO"],
   EN_CAMINO:  ["ENTREGADO",  "CANCELADO"],
   ENTREGADO:  [],
   CANCELADO:  [],

@@ -12,9 +12,10 @@ type Props = {
     motivo?: string
   ) => void;
   isLoading?: boolean;
+  censored?: boolean;
 };
 
-export const OrderColumn = ({ status, title, orders, onAvanzar, isLoading }: Props) => {
+export const OrderColumn = ({ status, title, orders, onAvanzar, isLoading, censored = false }: Props) => {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
@@ -33,6 +34,7 @@ export const OrderColumn = ({ status, title, orders, onAvanzar, isLoading }: Pro
         ref={setNodeRef}
         className={`
           space-y-3 flex-1 rounded-lg p-1 transition-colors duration-150
+          overflow-y-auto max-h-[calc(100vh-220px)]
           ${isOver ? "bg-primary/5 ring-2 ring-primary/30 ring-inset" : ""}
         `}
       >
@@ -51,6 +53,7 @@ export const OrderColumn = ({ status, title, orders, onAvanzar, isLoading }: Pro
               order={order}
               onAvanzar={onAvanzar}
               isLoading={isLoading}
+              censored={censored}
             />
           ))
         )}
