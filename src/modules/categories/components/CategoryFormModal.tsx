@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Modal } from "../../../shared/components/Modal";
 import { Button } from "../../../shared/components/Button";
+import { ParentCategoryCombobox } from "./ParentCategoryCombobox";
 
 import type { CategoriaRead } from "../types/Categories";
 
@@ -18,6 +19,7 @@ type Props = {
   formError: string;
   isSubmitting: boolean;
   uploadingImage: boolean;
+  categories: CategoriaRead[];
   onClose: () => void;
   onChange: (next: CategoryFormState) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
@@ -31,6 +33,7 @@ export const CategoryFormModal = ({
   formError,
   isSubmitting,
   uploadingImage,
+  categories,
   onClose,
   onChange,
   onSubmit,
@@ -202,62 +205,18 @@ export const CategoryFormModal = ({
 
         </div>
 
-        {/* PARENT ID */}
-        {!editing && (
-
-          <div className="space-y-2">
-
-            <label
-              className="
-                text-sm
-                font-semibold
-                text-on-surface
-              "
-            >
-              Parent ID
-            </label>
-
-            <input
-              value={form.parent_id}
-              onChange={(event) =>
-                onChange({
-                  ...form,
-                  parent_id: event.target.value,
-                })
-              }
-              className="
-                w-full
-
-                rounded-lg
-
-                border
-                border-outline
-
-                bg-surface-container-low
-
-                px-4
-                py-3
-
-                text-on-surface
-                placeholder:text-on-surface-variant
-
-                outline-none
-
-                transition-all
-                duration-200
-
-                focus:border-primary
-                focus:ring-2
-                focus:ring-primary/20
-              "
-              placeholder="Opcional"
-              type="number"
-              min={1}
-            />
-
-          </div>
-
-        )}
+        {/* CATEGORÍA PADRE */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-on-surface">
+            Categoría padre
+          </label>
+          <ParentCategoryCombobox
+            value={form.parent_id}
+            onChange={(parentId) => onChange({ ...form, parent_id: parentId })}
+            categories={categories}
+            excludeId={editing?.id}
+          />
+        </div>
 
         {/* ERROR */}
         {formError && (

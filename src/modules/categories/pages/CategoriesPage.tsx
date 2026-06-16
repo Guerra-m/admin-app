@@ -185,6 +185,7 @@ export const CategoriesPage = () => {
         formError={formError}
         isSubmitting={isSubmitting}
         uploadingImage={uploadingImage}
+        categories={data}
         onClose={() => setOpen(false)}
         onChange={setForm}
         onSubmit={onSubmit}
