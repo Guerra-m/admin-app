@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import type { PedidoRead, EstadoPedidoCodigo } from "../types/Order";
@@ -23,6 +24,9 @@ export const OrderCard = ({ order, onAvanzar, isLoading, censored = false }: Pro
     !!user &&
     user.roles.includes("PEDIDOS") &&
     !user.roles.includes("ADMIN");
+
+  const [showCancel, setShowCancel] = useState(false);
+  const [motivo, setMotivo] = useState("");
 
   const estado = order.estado_codigo as EstadoPedidoCodigo;
   const transiciones = FSM_TRANSITIONS[estado] ?? [];
@@ -106,14 +110,9 @@ export const OrderCard = ({ order, onAvanzar, isLoading, censored = false }: Pro
           </button>
         ))}
 
-        {canCancel && (
+        {canCancel && !showCancel && (
           <button
-            onClick={() => {
-              const motivo = window.prompt("Motivo de cancelación (obligatorio):");
-              if (motivo?.trim()) {
-                onAvanzar(order.id, "CANCELADO", motivo.trim());
-              }
-            }}
+            onClick={() => setShowCancel(true)}
             disabled={isLoading}
             className="
               rounded-md bg-error/10 text-error
@@ -125,6 +124,44 @@ export const OrderCard = ({ order, onAvanzar, isLoading, censored = false }: Pro
           >
             Cancelar pedido
           </button>
+        )}
+
+        {canCancel && showCancel && (
+          <div
+            className="rounded-md border border-error/30 bg-error/5 p-2 space-y-2"
+            onPointerDown={(e) => e.stopPropagation()}
+          >
+            <p className="text-xs font-semibold text-error">Motivo de cancelación</p>
+            <textarea
+              placeholder="Ingresá el motivo..."
+              value={motivo}
+              onChange={(e) => setMotivo(e.target.value)}
+              rows={2}
+              className="w-full text-xs rounded p-1.5 bg-surface border border-outline-variant resize-none outline-none focus:border-error"
+            />
+            <div className="flex gap-1.5">
+              <button
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={() => { setShowCancel(false); setMotivo(""); }}
+                className="flex-1 text-xs py-1 rounded border border-outline-variant bg-surface-container hover:bg-surface transition-colors"
+              >
+                No
+              </button>
+              <button
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={() => {
+                  if (!motivo.trim()) return;
+                  onAvanzar(order.id, "CANCELADO", motivo.trim());
+                  setShowCancel(false);
+                  setMotivo("");
+                }}
+                disabled={!motivo.trim() || isLoading}
+                className="flex-1 text-xs py-1 rounded bg-error text-white disabled:opacity-50 transition-colors"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </article>
