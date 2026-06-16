@@ -1,29 +1,34 @@
-import { Link } from "react-router-dom";
-
 import { Button } from "../../../shared/components/Button";
 
 import type { ProductoRead } from "../types/Producto";
+import type { UnidadMedidaRead } from "../../unidades-medida/types/UnidadMedida";
 
 type Props = {
   products: ProductoRead[];
-
+  unidades?: UnidadMedidaRead[];
   onView: (product: ProductoRead) => void;
-
   onEdit: (product: ProductoRead) => void;
-
   onDelete: (id: number) => void;
 };
 
 export const ProductsTable = ({
   products,
+  unidades = [],
   onView,
   onEdit,
   onDelete,
 }: Props) => {
+  const getSimboloUnidad = (id?: number | null) =>
+    id ? (unidades.find((u) => u.id === id)?.simbolo ?? null) : null;
+
+  const sorted = [...products].sort((a, b) =>
+    a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }),
+  );
   return (
     <div
       className="
-        overflow-x-auto
+        overflow-auto
+        max-h-150
         rounded-xl
         bg-surface-container-lowest
         border
@@ -34,7 +39,7 @@ export const ProductsTable = ({
       <table className="min-w-full table-fixed text-sm font-admin">
 
         {/* HEADER */}
-        <thead className="bg-surface-container text-on-surface border-b border-outline-variant">
+        <thead className="bg-surface-container text-on-surface border-b border-outline-variant sticky top-0 z-10">
           <tr>
             <th className="w-32 p-4 text-left font-semibold">Imagen</th>
             <th className="p-4 text-left font-semibold">Nombre</th>
@@ -49,7 +54,7 @@ export const ProductsTable = ({
 
         {/* BODY */}
         <tbody>
-          {products.map((product, index) => {
+          {sorted.map((product, index) => {
             console.log(product);
             const coverImage = Array.isArray(product.imagenes_url) && product.imagenes_url.length > 0
               ? product.imagenes_url[0]
@@ -121,7 +126,7 @@ export const ProductsTable = ({
                 <td className="p-4">
                   <span
                     className={`
-                      inline-flex rounded-full px-3 py-1 text-xs font-semibold
+                      inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold
                       ${product.stock_cantidad > 0
                         ? "bg-tertiary/10 text-tertiary"
                         : "bg-error/10 text-error"
@@ -129,6 +134,11 @@ export const ProductsTable = ({
                     `}
                   >
                     {product.stock_cantidad}
+                    {getSimboloUnidad(product.unidad_venta_id) && (
+                      <span className="font-mono opacity-75">
+                        {getSimboloUnidad(product.unidad_venta_id)}
+                      </span>
+                    )}
                   </span>
                 </td>
 

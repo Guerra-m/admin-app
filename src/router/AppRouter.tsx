@@ -13,6 +13,7 @@ import { OrdersPage } from "../modules/orders/pages/OrdersPage";
 import { ProfilePage } from "../modules/profile/pages/ProfilePage";
 import { UsersPage } from "../modules/users/pages/UsersPage";
 import { DashboardPage } from "../modules/dashboard/pages/DashBoardPage";
+import { UnidadesMedidaPage } from "../modules/unidades-medida/pages/UnidadesMedidaPage";
 
 export const AppRouter = () => {
   return (
@@ -92,6 +93,16 @@ export const AppRouter = () => {
             element={
               <RoleRoute roles={["ADMIN"]}>
                 <DashboardPage />
+              </RoleRoute>
+            }
+          />
+
+          {/* UNIDADES DE MEDIDA */}
+          <Route
+            path="/unidades-medida"
+            element={
+              <RoleRoute roles={["ADMIN"]}>
+                <UnidadesMedidaPage />
               </RoleRoute>
             }
           />

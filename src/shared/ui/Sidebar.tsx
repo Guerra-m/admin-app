@@ -20,18 +20,19 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <aside
         className={`
           fixed top-0 left-0 z-50
-          w-64 min-h-screen
+          w-64 h-screen
           bg-surface-container-low
           text-on-surface
           p-container-padding-admin
           shadow-warm
           flex flex-col
+          overflow-y-auto
           transform transition-transform duration-300
 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
 
           lg:translate-x-0
-          lg:static
+          lg:sticky lg:top-0
         `}
       >
 

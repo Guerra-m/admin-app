@@ -45,6 +45,13 @@ const links = [
   },
 
   {
+    to: "/unidades-medida",
+    label: "Unidades",
+    icon: "straighten",
+    roles: ["ADMIN"],
+  },
+
+  {
     to: "/carrito",
     label: "Carrito",
     icon: "shopping_cart",

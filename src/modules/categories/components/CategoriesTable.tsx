@@ -18,10 +18,13 @@ export const CategoriesTable = ({ categories, onEdit, onDelete }: Props) => {
       return next;
     });
 
-  const childrenOf = (parentId: number) =>
-    categories.filter((c) => c.parent_id === parentId);
+  const alpha = (a: CategoriaRead, b: CategoriaRead) =>
+    a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" });
 
-  const roots = categories.filter((c) => c.parent_id == null);
+  const childrenOf = (parentId: number) =>
+    categories.filter((c) => c.parent_id === parentId).sort(alpha);
+
+  const roots = categories.filter((c) => c.parent_id == null).sort(alpha);
 
   const ActionButtons = ({ category }: { category: CategoriaRead }) => (
     <div className="flex gap-3">
@@ -110,10 +113,10 @@ export const CategoriesTable = ({ categories, onEdit, onDelete }: Props) => {
     });
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-outline-variant bg-surface-container-low shadow-warm">
+    <div className="overflow-auto max-h-150 rounded-2xl border border-outline-variant bg-surface-container-low shadow-warm">
       <table className="min-w-full">
 
-        <thead className="border-b border-outline-variant bg-surface-container">
+        <thead className="border-b border-outline-variant bg-surface-container sticky top-0 z-10">
           <tr>
             <th className="px-6 py-4 text-left text-sm font-bold font-admin text-on-surface">
               Nombre
