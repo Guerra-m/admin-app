@@ -15,4 +15,4 @@ npm install -g json-server
 video: https://www.youtube.com/watch?v=2V3IXbaUrUI
 
 TPI FINAL(VIDEO): 
-https://drive.google.com/file/d/1W5GQxVlU_8ERmUSjPJ0acPXpBJGVAHbh/view?usp=sharing
+https://drive.google.com/file/d/18A-rmevyg-Tp8GMGm0qNH7vJbBuo4sUk/view?usp=sharing
